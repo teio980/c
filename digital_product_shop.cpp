@@ -7,6 +7,8 @@
 
 using namespace std;
 
+const int TABLE_SIZE = 101;
+
 struct Person{
 	string username;
 	string password;
@@ -189,6 +191,113 @@ class login_system{
 	}
 };
 
+class HashTable {
+public:
+    int *table;
+
+    HashTable() {
+        table = new int[TABLE_SIZE];
+        for (int i = 0; i < TABLE_SIZE; ++i) {
+            table[i] = -1;
+        }
+    }
+
+    ~HashTable() {
+        delete[] table;
+    }
+
+    void hash(int key) {
+        int HK = key % TABLE_SIZE;
+        if (collision(HK)) {
+            quadratic_probing(key);
+        } else {
+            table[HK] = key;
+        }
+    }
+    
+    void hash(string key) {
+        int hashcode = getHashCode(key);
+        int HK = hashcode % TABLE_SIZE;
+        if (collision(HK)) {
+            quadratic_probing(hashcode);
+        } else {
+            table[HK] = hashcode;
+        }
+    }
+
+    bool collision(int HK) {
+        if (table[HK] != -1) {
+            return true;
+        }
+        return false;
+    }
+
+    int quadratic_probing(int key) {
+        int times = 1;
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            int hash_value = (key + (times * times)) % TABLE_SIZE;
+            if (collision(hash_value)) {
+                times++;
+            } else {
+                table[hash_value] = key;
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    bool exists(int key) {
+        int HK = key % TABLE_SIZE;
+        if (table[HK] == key) {
+            return true;
+        }
+        int times = 1;
+        while (times < TABLE_SIZE) {
+            int hash_value = (key + times * times) % TABLE_SIZE;
+            if (table[hash_value] == key) {
+                return true;
+            } else if (table[hash_value] == -1) {
+                return false;
+            }
+            times++;
+        }
+        return false;
+    }
+    
+    bool exists(string key) {
+        int hashcode = getHashCode(key);
+        int HK = hashcode % TABLE_SIZE;
+        if (table[HK] == hashcode) {
+            return true;
+        }
+        int times = 1;
+        while (times < TABLE_SIZE) {
+            int hash_value = (hashcode + times * times) % TABLE_SIZE;
+            if (table[hash_value] == hashcode) {
+                return true;
+            } else if (table[hash_value] == -1) {
+                return false;
+            }
+            times++;
+        }
+        return false;
+    }
+    
+    int getHashCode(string key) {
+        int sum = 0;
+        for (char c : key) {
+            sum += c;
+        }
+        return sum;
+    }
+
+    void display() {
+        for (int i = 0; i < TABLE_SIZE; i++) {
+            cout << i << " --> " << table[i] << endl;
+        }
+    }
+};
+
 class Product{
 	public:
 	struct Item {
@@ -352,6 +461,65 @@ class Laptop  : public Product{
 		        temp = temp->next;
 		    }
 		}
+		void searchLaptop() {
+		    HashTable priceTable;
+		    HashTable modelTable;
+		
+		    ifstream readfile2("Laptop.txt");
+		    while (readfile2 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		        priceTable.hash(Cache.price);
+		        modelTable.hash(Cache.model);
+		    }
+		    readfile2.close();
+		
+		    cout << "Search by:\n1. Price\n2. Model\nChoose (1/2): ";
+		    int option;
+		    cin >> option;
+		
+		    if (option == 1) {
+		        int searchPrice;
+		        cout << "Enter price to search: ";
+		        cin >> searchPrice;
+		
+		        if (priceTable.exists(searchPrice)) {
+		            cout << "Price found! Matching laptops:" << endl;
+		
+		            ifstream readfile3("Laptop.txt");
+		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		                if (Cache.price == searchPrice) {
+		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
+		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                }
+		            }
+		            readfile3.close();
+		        } else {
+		            cout << "Price not found." << endl;
+		        }
+		
+		    } else if (option == 2) {
+		        string searchModel;
+		        cout << "Enter model to search: ";
+		        cin >> searchModel;
+		
+		        if (modelTable.exists(searchModel)) {
+		            cout << "Model found! Matching laptops:" << endl;
+		
+		            ifstream readfile4("Laptop.txt");
+		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		                if (Cache.model == searchModel) {
+		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
+		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                }
+		            }
+		            readfile4.close();
+		        } else {
+		            cout << "Model not found." << endl;
+		        }
+		    } else {
+		        cout << "Invalid option." << endl;
+		    }
+			system("pause");
+		}
 };
 class Handphone : public Product{
 	private:
@@ -486,6 +654,67 @@ class Handphone : public Product{
 		        temp = temp->next;
 		    }
 		}
+		void searchHandphone() {
+		    HashTable priceTable;
+		    HashTable modelTable;
+		
+		    ifstream readfile2("Handphone.txt");
+		    while (readfile2 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		        priceTable.hash(Cache.price);
+		        modelTable.hash(Cache.model);
+		    }
+		    readfile2.close();
+		
+		    cout << "Search by:\n1. Price\n2. Model\nChoose (1/2): ";
+		    int option;
+		    cin >> option;
+		
+		    if (option == 1) {
+		        int searchPrice;
+		        cout << "Enter price to search: ";
+		        cin >> searchPrice;
+		
+		        if (priceTable.exists(searchPrice)) {
+		            cout << "Price found! Matching handphones:" << endl;
+		
+		            ifstream readfile3("Handphone.txt");
+		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		                if (Cache.price == searchPrice) {
+		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
+		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                }
+		            }
+		            readfile3.close();
+		        } else {
+		            cout << "Price not found." << endl;
+		        }
+		
+		    } else if (option == 2) {
+		        string searchModel;
+		        cout << "Enter model to search: ";
+		        cin >> searchModel;
+		
+		        if (modelTable.exists(searchModel)) {
+		            cout << "Model found! Matching handphones:" << endl;
+		
+		            ifstream readfile4("Handphone.txt");
+		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		                if (Cache.model == searchModel) {
+		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
+		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                }
+		            }
+		            readfile4.close();
+		        } else {
+		            cout << "Model not found." << endl;
+		        }
+		    } else {
+		        cout << "Invalid option." << endl;
+		    }
+		
+		    system("pause");
+		}
+
 };
 class User : public login_system{	
 	public:
@@ -534,7 +763,7 @@ class Admin : public login_system{
 					case 1:
 						set("admin");
 						login();
-						back = functionMenu();
+						back = functionMenua();
 						break;
 					case 2:
 						return 1;
@@ -543,7 +772,7 @@ class Admin : public login_system{
 			}
 			return 0;
 		}	
-		int functionMenu() {
+		int functionMenua() {
 	        system("cls");
 	        int choice;
 	        int back = 0;
@@ -582,11 +811,11 @@ class Admin : public login_system{
 	                    break;
 	                }
 					case 7: {
-	                    handphone.add_record();  
+	                    laptop.searchLaptop();  
 	                    break;
 	                }
 					case 8: {
-	                    handphone.add_record();  
+	                    handphone.searchHandphone();  
 	                    break;
 	                }
 	                case 9: {
@@ -607,12 +836,12 @@ class Admin : public login_system{
 };
 void sortLaptop(){
 }
-void searchLaptop(){
-}
+
 void sortHandphone(){
 }
 void searchHandphone(){
 }
+
 int main(){
 	int choice,back=1;
 	User U;

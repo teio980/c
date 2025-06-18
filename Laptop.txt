@@ -1,0 +1,6 @@
+victus hp 9999 16
+hp hp 9999 8
+tuf asus 9999 8
+tuf asus 118 16
+l Asus 789 16
+r hp 989 12
