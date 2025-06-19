@@ -4,11 +4,8 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
-
 using namespace std;
-
 const int TABLE_SIZE = 101;
-
 struct Person{
 	string username;
 	string password;
@@ -20,7 +17,6 @@ struct Person{
 	string f_identity;
 	string user_id;
 };
-
 class login_system{
 	private:
 		Person P;
@@ -36,7 +32,6 @@ class login_system{
 				cout<<"Identity is NOT Valid"<<endl;
 			}
 		}
-		
 		int check_username(){
 			ifstream readfile(P.filename);
 		
@@ -44,7 +39,6 @@ class login_system{
 				cout << "Unable to open file "<<P.filename<<endl;
 	        	exit(0);
 			}
-			
 			while(readfile>>P.f_user_ID>>P.f_username>>P.f_password>>P.f_identity){
 				if(P.f_username == P.username ){
 					cout<<"Your name is repeat.Please change!"<<endl;
@@ -52,24 +46,19 @@ class login_system{
 					return 0;
 				}
 			}
-			
 			readfile.close();
-			
 			if(P.username.empty()){
 				cout<<"- Please do not use blank as your username"<<endl;
 		        return 0;
 			}
-			
 			for (char ch : P.username){
 		        if (ch == ' ') {  
 		            std::cout << "- Please do not contain space" << std::endl;
 		            return 0;
 		        }
 		    }
-		    
 		    return 1;
 		}
-		
 		int check_password(){
 			if(P.password.empty()){
 				cout<<"- Please do not use blank as your username"<<endl;
@@ -84,7 +73,6 @@ class login_system{
 		    }
 		    return 1;
 		}
-		
 	public:
 	login_system(){	
 		P.username = "";
@@ -97,7 +85,6 @@ class login_system{
 		P.f_identity = "";
 		P.user_id = "";
 	}
-	
 	~login_system(){
 		P.username = "";
 		P.password = "";
@@ -110,7 +97,6 @@ class login_system{
 		P.user_id = "";
 		cout<<"Your Personal Data Have Been Clear."<<endl;
 	}
-		
 	int login(){
 		check_identity();
 		ifstream readfile(P.filename);
@@ -120,10 +106,8 @@ class login_system{
 			cout<<"Enter your name:";
 			cin.ignore();
 			getline(cin,P.username);
-			
 			cout<<"Enter your password:";
 			getline(cin,P.password);
-			
 			while(readfile>>P.f_user_ID>>P.f_username>>P.f_password>>P.f_identity){
 				if(P.f_username == P.username && P.f_password == P.password){
 					cout<<"Successful Login!!"<<endl;
@@ -137,7 +121,6 @@ class login_system{
 		}while(count>0);
 		exit(0);
 	}
-	
 	int register_user(){
 		system("cls");
 		set("user");
@@ -147,31 +130,24 @@ class login_system{
 		cin.ignore();
 		cout<<"Enter your name:";
 		getline(cin,P.username);
-		
 		cout<<"Enter your password:";
 		getline(cin,P.password);
-		
 		int U_Valid = check_username();
 		int P_Valid = check_password();
-		
 		if(U_Valid == 1 && P_Valid == 1){
 			ofstream openfile(P.filename,ios::app);
 			ifstream readfile(P.filename);
-			
 			if(!openfile){
 			cout << "Unable to open file "<<P.filename<<endl;
         	exit(0);
 			}
-			
 			if(!readfile){
 			cout << "Unable to open file "<<P.filename<<endl;
         	exit(0);
 			}
-			
 			while (getline(readfile, line)) {
 		        line_count++;
 		    }
-			
 			openfile<<"U"<<line_count<<" "<<P.username<<" "<<P.password<<" "<<P.identity<<endl;
 			openfile.close();
 			readfile.close();
@@ -185,27 +161,22 @@ class login_system{
 		}
 		return 0;
 	}
-	
 	void set(string Identity){
 		P.identity = Identity;
 	}
 };
-
 class HashTable {
 public:
     int *table;
-
     HashTable() {
         table = new int[TABLE_SIZE];
         for (int i = 0; i < TABLE_SIZE; ++i) {
             table[i] = -1;
         }
     }
-
     ~HashTable() {
         delete[] table;
     }
-
     void hash(int key) {
         int HK = key % TABLE_SIZE;
         if (collision(HK)) {
@@ -214,7 +185,6 @@ public:
             table[HK] = key;
         }
     }
-    
     void hash(string key) {
         int hashcode = getHashCode(key);
         int HK = hashcode % TABLE_SIZE;
@@ -224,14 +194,12 @@ public:
             table[HK] = hashcode;
         }
     }
-
     bool collision(int HK) {
         if (table[HK] != -1) {
             return true;
         }
         return false;
     }
-
     int quadratic_probing(int key) {
         int times = 1;
         for (int i = 0; i < TABLE_SIZE; i++) {
@@ -245,7 +213,6 @@ public:
         }
         return 0;
     }
-
     bool exists(int key) {
         int HK = key % TABLE_SIZE;
         if (table[HK] == key) {
@@ -263,7 +230,6 @@ public:
         }
         return false;
     }
-    
     bool exists(string key) {
         int hashcode = getHashCode(key);
         int HK = hashcode % TABLE_SIZE;
@@ -282,7 +248,6 @@ public:
         }
         return false;
     }
-    
     int getHashCode(string key) {
         int sum = 0;
         for (char c : key) {
@@ -290,7 +255,6 @@ public:
         }
         return sum;
     }
-
     void display() {
         for (int i = 0; i < TABLE_SIZE; i++) {
             cout << i << " --> " << table[i] << endl;
@@ -429,34 +393,26 @@ class Product{
 	    int quantity;
 	    Item *next;
 	};
-	
 	virtual void add_record() = 0;
-	
 	virtual void display() = 0;
-	
 	virtual void edit() = 0;
 	
 	virtual void deleteproduct() = 0;
 };
-
 class Laptop  : public Product{
 	private:
     Item* head, * temp;
     Item Cache;
-    
     public:
     	Laptop(){
     		head = nullptr;
     		temp = nullptr;
-    		int count = 0;
-    		
+    		int count = 0;	
     		ifstream readfile("Laptop.txt");
-		    
 		    if(!readfile){
 			cout << "Unable to open file Laptop.txt"<<endl;
         	exit(0);
 			}
-			
 			while (readfile >>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM){
 				Item* newItem = new Item();
 		        newItem->model = Cache.model;
@@ -465,7 +421,6 @@ class Laptop  : public Product{
 		        newItem->RAM = Cache.RAM;
 		        newItem->P_ID = "L" + to_string(count++);
 		        newItem->next = nullptr;
-
 		        if (head == nullptr) {
 		            head = newItem;
 		        } else {
@@ -477,7 +432,6 @@ class Laptop  : public Product{
 		        }
 			}
 		}
-    	
     	void add_record() override {
 		    int size;
 		    do{
@@ -538,7 +492,6 @@ class Laptop  : public Product{
 		    }
 		    writefile.close(); 
 		}
-		
 		void display() override {
 			temp = head;
 		    cout << "\nLaptop List:\n";
@@ -547,7 +500,6 @@ class Laptop  : public Product{
 		        temp = temp->next;
 		    }
 		}
-		
 		void edit() override{
 			string product_id;
 			temp = head;
@@ -593,11 +545,9 @@ class Laptop  : public Product{
 		        modelTable.hash(Cache.model);
 		    }
 		    readfile2.close();
-		
 		    cout << "Search by:\n1. Price\n2. Model\nChoose (1/2): ";
 		    int option;
 		    cin >> option;
-		
 		    if (option == 1) {
 		        int searchPrice;
 		        cout << "Enter price to search: ";
@@ -617,15 +567,12 @@ class Laptop  : public Product{
 		        } else {
 		            cout << "Price not found." << endl;
 		        }
-		
 		    } else if (option == 2) {
 		        string searchModel;
 		        cout << "Enter model to search: ";
 		        cin >> searchModel;
-		
 		        if (modelTable.exists(searchModel)) {
 		            cout << "Model found! Matching laptops:" << endl;
-		
 		            ifstream readfile4("Laptop.txt");
 		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
 		                if (Cache.model == searchModel) {
@@ -738,7 +685,6 @@ class Handphone : public Product{
 		        newItem->RAM = Cache.RAM;
 		        newItem->P_ID = "H" + to_string(count++);
 		        newItem->next = nullptr;
-
 		        if (head == nullptr) {
 		            head = newItem;
 		        } else {
