@@ -6,6 +6,7 @@
 #include <cstdlib>
 using namespace std;
 const int TABLE_SIZE = 101;
+bool checkEmpty(string input);
 struct Person{
 	string username;
 	string password;
@@ -51,12 +52,12 @@ class login_system{
 				cout<<"- Please do not use blank as your username"<<endl;
 		        return 0;
 			}
-			for (char ch : P.username){
-		        if (ch == ' ') {  
-		            std::cout << "- Please do not contain space" << std::endl;
-		            return 0;
-		        }
-		    }
+			for (int i = 0; i < P.username.length(); i++) {
+			    if (P.username[i] == ' ') {
+			        std::cout << "- Please do not contain space" << std::endl;
+			        return 0;
+			    }
+			}
 		    return 1;
 		}
 		int check_password(){
@@ -466,8 +467,20 @@ class Laptop  : public Product{
 		        cout << "Enter Laptop Model: ";
 		        cin.ignore();
 		        getline(cin, newItem->model);
+		        while (checkEmpty(newItem->model)) {
+				    cout << "- Input cannot be empty or contain space. "<<endl;
+				    cout<<"You may use the _ to replace"<<endl;
+				    cout << "Enter Laptop Model: ";
+				    getline(cin, newItem->model);
+				}
 		        cout << "Enter Brand: ";
 		        getline(cin, newItem->brand);
+		        while (checkEmpty(newItem->brand)) {
+				    cout << "- Input cannot be empty or contain space."<<endl;
+				    cout<<"You may use the _ to replace"<<endl;
+				    cout<<"Enter Brand: ";
+				    getline(cin, newItem->brand);
+				}
 		        cout << "Enter Price: ";
 		        cin >> newItem->price;
 		        cout << "Enter RAM (GB): ";
@@ -730,8 +743,20 @@ class Handphone : public Product{
 		        cout << "Enter Handphone Model: ";
 		        cin.ignore();
 		        getline(cin, newItem->model);
+		        while (checkEmpty(newItem->brand)) {
+				    cout << "- Input cannot be empty or contain space."<<endl;
+				    cout<<"You may use the _ to replace"<<endl;
+				    cout<<"Enter Hanphone Model: ";
+				    getline(cin, newItem->brand);
+				}
 		        cout << "Enter Brand: ";
 		        getline(cin, newItem->brand);
+		        while (checkEmpty(newItem->brand)) {
+				    cout << "- Input cannot be empty or contain space."<<endl;
+				    cout<<"You may use the _ to replace"<<endl;
+				    cout<<"Enter Brand: ";
+				    getline(cin, newItem->brand);
+				}
 		        cout << "Enter Price: ";
 		        cin >> newItem->price;
 		        cout << "Enter RAM (GB): ";
@@ -780,8 +805,20 @@ class Handphone : public Product{
 		            cout << "Enter New Laptop Model: ";
 		            cin.ignore();
 		            getline(cin, temp->model);
+		            while (checkEmpty(temp->model)) {
+				    cout << "- Input cannot be empty or contain space."<<endl;
+				    cout<<"You may use the _ to replace"<<endl;
+				    cout << "Enter New Laptop Model: ";
+				    getline(cin, temp->model);
+					}
 		            cout << "Enter New Brand: ";
 		            getline(cin, temp->brand);
+		            while (checkEmpty(temp->brand)) {
+				    cout << "- Input cannot be empty or contain space."<<endl;
+				    cout<<"You may use the _ to replace"<<endl;
+				    cout << "Enter New Brand: ";
+				    getline(cin, temp->brand);
+					}
 		            cout << "Enter New Price: ";
 		            cin >> temp->price; 
 		            cout << "Enter New RAM (GB): ";
@@ -1075,4 +1112,13 @@ int main(){
 		}
 	}	
 	return 0;
+}
+
+bool checkEmpty(string input){
+	for (int i = 0; i < input.length(); i++) {
+    if (input[i] == ' ') {
+        return true;
+    }
+	}
+	return false;
 }

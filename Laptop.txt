@@ -5,3 +5,5 @@ tuf asus 118 16
 tuf asus 118 16
 l Asus 789 16
 r hp 989 12
+Acer Nitro 5 Acer 3000 8
+ASUS TUF 15 GAMING ASUS 3299.9 8
