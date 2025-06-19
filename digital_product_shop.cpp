@@ -421,13 +421,13 @@ public:
 class Product{
 	public:
 	struct Item {
-	string P_ID;
-    string model;
-    string brand;
-    float price;
-    int RAM;
-    int quantity;
-    Item *next;
+		string P_ID;
+	    string model;
+	    string brand;
+	    float price;
+	    int RAM;
+	    int quantity;
+	    Item *next;
 	};
 	
 	virtual void add_record() = 0;
@@ -435,6 +435,8 @@ class Product{
 	virtual void display() = 0;
 	
 	virtual void edit() = 0;
+	
+	virtual void deleteproduct() = 0;
 };
 
 class Laptop  : public Product{
@@ -676,6 +678,40 @@ class Laptop  : public Product{
 		    }
 		    system("pause");
 		}
+		void deleteproduct() override {
+		    string product_id;
+		    temp = head;
+		
+		    cout << "\nLaptop List:\n";
+		    while (temp != nullptr) {
+		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
+		             << "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB" << endl;
+		        temp = temp->next;
+		    }
+		
+		    cout << "Enter the Product ID you want to delete: ";
+		    cin >> product_id;
+		
+		    temp = head;
+		    Item* prev = nullptr;   
+		
+		    while (temp != nullptr) {
+		        if (temp->P_ID == product_id) {
+		            if (prev == nullptr) {
+		                head = temp->next;
+		            } else {
+		                prev->next = temp->next;
+		            }
+		            delete temp;
+		            cout << "Laptop deleted successfully!\n";
+		            return;
+		        }
+		        prev = temp;
+		        temp = temp->next;
+		    }
+		
+		    cout << "Laptop with Product ID " << product_id << " not found.\n";
+		}
 
 
 };
@@ -907,6 +943,41 @@ class Handphone : public Product{
 		        cout << "Invalid choice!" << endl;
 		    }
 		}
+		void deleteproduct() override {
+		    string product_id;
+		    temp = head;
+		
+		    cout << "\nHandphone List:\n";
+		    while (temp != nullptr) {
+		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
+		             << "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB" << endl;
+		        temp = temp->next;
+		    }
+		
+		    cout << "Enter the Product ID you want to delete: ";
+		    cin >> product_id;
+		
+		    temp = head;
+		    Item* prev = nullptr;
+		
+		    while (temp != nullptr) {
+		        if (temp->P_ID == product_id) {
+		            if (prev == nullptr) {
+		                head = temp->next;
+		            } else {
+		                prev->next = temp->next;
+		            }
+		            delete temp;
+		            cout << "Handphone deleted successfully!\n";
+		            return;
+		        }
+		        prev = temp;
+		        temp = temp->next;
+		    }
+		
+		    cout << "Handphone with Product ID " << product_id << " not found.\n";
+		}
+
 };
 class User : public login_system{	
 	public:
@@ -974,7 +1045,7 @@ class Admin : public login_system{
 	            cout << "-----------------------------" << endl;
 	            cout << "     Admin Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
-	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n-1. Back to previous" << endl;
+	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            cin >> choice;
 	            switch (choice) {
@@ -1018,6 +1089,12 @@ class Admin : public login_system{
 	                    handphone.sortHandphone();  
 	                    break;
 	                }
+	                case 11:
+	                	laptop.deleteproduct();
+	                	break;
+	                case 12:
+	                	handphone.deleteproduct();
+	                	break;
 	                case -1:
 	                    return 0;  
 	                    break;
@@ -1026,11 +1103,6 @@ class Admin : public login_system{
 	        return 0;
 	    }
 };
-void sortLaptop(){
-}
-
-void sortHandphone(){
-}
 
 int main(){
 	int choice,back=1;
