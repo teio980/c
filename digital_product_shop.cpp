@@ -298,6 +298,126 @@ public:
     }
 };
 
+//selectionsort
+class SelectionSort {
+public:
+    void sort(int arr[], int n) {
+        int i, j, min_idx;
+        for (i = 0; i < n - 1; i++) {
+            min_idx = i;
+            for (j = i + 1; j < n; j++)
+                if (arr[j] < arr[min_idx])
+                    min_idx = j;
+            swap(arr[min_idx], arr[i]);
+        }
+    }
+
+    void printArray(int arr[], int size) {
+        for (int i = 0; i < size; i++)
+            cout << arr[i] << " ";
+        cout << endl;
+    }
+    
+    void sortWithRecord(int price[], string model[], string brand[], int RAM[], int n) {
+        int i, j, min_idx;
+        for (i = 0; i < n - 1; i++) {
+            min_idx = i;
+            for (j = i + 1; j < n; j++)
+                if (price[j] < price[min_idx])
+                    min_idx = j;
+            swap(price[min_idx], price[i]);
+            swap(model[min_idx], model[i]);
+            swap(brand[min_idx], brand[i]);
+            swap(RAM[min_idx], RAM[i]);
+        }
+    }
+
+    void printFull(string model[], string brand[], int price[], int RAM[], int n) {
+        for (int i = 0; i < n; i++){
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+        }
+    }
+    
+    void printterbalik(string model[], string brand[], int price[], int RAM[], int count){
+    	for (int i = count - 1; i >= 0; i--){
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+        }
+	}
+
+private:
+    void swap(int &xp, int &yp) {
+        int temp = xp;
+        xp = yp;
+        yp = temp;
+    }
+    void swap(string &xp, string &yp) {
+        string temp = xp;
+        xp = yp;
+        yp = temp;
+    }
+};
+
+//inserttionsort
+class InsertSort {
+public:
+    void insertionSort(int arr[], int n) {
+        int i, key, j;
+        for (i = 1; i < n; i++) {
+            key = arr[i];
+            j = i - 1;
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j = j - 1;
+            }
+            arr[j + 1] = key;
+        }
+    }
+
+    void insertionsortall(int price[], string model[], string brand[], int RAM[], int n) {
+        int i, keyPrice, j, keyRAM;
+        string keyModel, keyBrand;
+
+        for (i = 1; i < n; i++) {
+            keyPrice = price[i];
+            keyModel = model[i];
+            keyBrand = brand[i];
+            keyRAM = RAM[i];
+
+            j = i - 1;
+
+            while (j >= 0 && price[j] > keyPrice) {
+                price[j + 1] = price[j];
+                model[j + 1] = model[j];
+                brand[j + 1] = brand[j];
+                RAM[j + 1] = RAM[j];
+                j = j - 1;
+            }
+            price[j + 1] = keyPrice;
+            model[j + 1] = keyModel;
+            brand[j + 1] = keyBrand;
+            RAM[j + 1] = keyRAM;
+        }
+    }
+
+    void printArray(int arr[], int n) {
+        for (int i = 0; i < n; i++){
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+
+    void printFull(string model[], string brand[], int price[], int RAM[], int n) {
+        for (int i = 0; i < n; i++){
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+        }
+    }
+    void printterbalik(string model[], string brand[], int price[], int RAM[], int count){
+    	for (int i = count - 1; i >= 0; i--){
+    		cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+		}
+	}
+};
+
 class Product{
 	public:
 	struct Item {
@@ -520,6 +640,44 @@ class Laptop  : public Product{
 		    }
 			system("pause");
 		}
+		void sortLaptop() {
+		    string model[TABLE_SIZE], brand[TABLE_SIZE];
+		    int price[TABLE_SIZE], RAM[TABLE_SIZE];
+		    int count = 0;
+		
+		    ifstream readfile2("Laptop.txt");
+		
+		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count]) {
+		        count++;
+		    }
+		
+		    for (int i = 0; i < count; i++){
+		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+		    }
+		
+		    int choice;
+		    cout << "\nChoose sort from:\n";
+		    cout << "1. Low to High\n";
+		    cout << "2. High to Low\n";
+		    cout << "Enter choice (1 or 2): ";
+		    cin >> choice;
+		
+		    SelectionSort s;
+		    s.sortWithRecord(price, model, brand, RAM, count);
+		
+		    if (choice == 1) {
+		        cout << "Sorted laptop data (Low to High):\n";
+		        s.printFull(model, brand, price, RAM, count);
+		    } else if (choice == 2) {
+		        cout << "Sorted laptop data (High to Low):\n";
+		        s.printterbalik(model, brand, price, RAM, count);
+		    } else {
+		        cout << "Invalid choice!" << endl;
+		    }
+		    system("pause");
+		}
+
+
 };
 class Handphone : public Product{
 	private:
@@ -714,7 +872,41 @@ class Handphone : public Product{
 		
 		    system("pause");
 		}
-
+		void sortHandphone() {
+		    string model[TABLE_SIZE], brand[TABLE_SIZE];
+		    int price[TABLE_SIZE], RAM[TABLE_SIZE];
+		    int count = 0;
+		
+		    ifstream readfile2("Handphone.txt");
+		
+		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count]) {
+		        count++;
+		    }
+		
+		    cout << "Original handphone data:\n";
+		    for (int i = 0; i < count; i++)
+		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+		
+		    int choice;
+		    cout << "Choose sort order:\n";
+		    cout << "1. Low to High\n";
+		    cout << "2. High to Low\n";
+		    cout << "Enter choice (1 or 2): ";
+		    cin >> choice;
+		
+		    InsertSort is;
+		    is.insertionsortall(price, model, brand, RAM, count);
+		
+		    if (choice == 1) {
+		        cout << "Sorted handphone data (Low to High):\n";
+		        is.printFull(model, brand, price, RAM, count);
+		    } else if (choice == 2) {
+		        cout << "Sorted handphone data (High to Low):\n";
+		        is.printterbalik(model, brand, price, RAM, count);
+		    } else {
+		        cout << "Invalid choice!" << endl;
+		    }
+		}
 };
 class User : public login_system{	
 	public:
@@ -819,11 +1011,11 @@ class Admin : public login_system{
 	                    break;
 	                }
 	                case 9: {
-	                    handphone.add_record();  
+	                    laptop.sortLaptop();  
 	                    break;
 	                }
 	                case 10: {
-	                    handphone.add_record();  
+	                    handphone.sortHandphone();  
 	                    break;
 	                }
 	                case -1:
@@ -838,8 +1030,6 @@ void sortLaptop(){
 }
 
 void sortHandphone(){
-}
-void searchHandphone(){
 }
 
 int main(){

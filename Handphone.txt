@@ -1,2 +1,4 @@
 H200 Vivo 1500 8
 G1000 Redmi 2000 16
+x100 Vivo 100 16
+12pm apple 999 4
