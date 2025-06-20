@@ -322,13 +322,13 @@ public:
 
     void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
         for (int i = 0; i < n; i++){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<"Quantity: "<< QTY[i] << endl;
         }
     }
     
     void printterbalik(string model[], string brand[], double price[], int RAM[],int QTY[], int count){
     	for (int i = count - 1; i >= 0; i--){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<"Quantity: "<< QTY[i]  << endl;
         }
 	}
 
@@ -550,7 +550,7 @@ class Laptop  : public Product{
 			temp = head;
 		    cout << "\nLaptop List:\n";
 		    while (temp != nullptr) {
-		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		}
@@ -559,7 +559,7 @@ class Laptop  : public Product{
 			temp = head;
 		    cout << "\nLaptop List:\n";
 		    while (temp != nullptr) {
-		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		    cout<<"Enter the Product ID you want to change :";
@@ -629,7 +629,7 @@ class Laptop  : public Product{
 		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.price == searchPrice) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << " " << Cache.quantity << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << " " << Cache.quantity << endl;
 		                }
 		            }
 		            readfile3.close();
@@ -646,7 +646,7 @@ class Laptop  : public Product{
 		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.model == searchModel) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << "Quantity" << Cache.quantity << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << "Quantity" << Cache.quantity << endl;
 		                }
 		            }
 		            readfile4.close();
@@ -671,7 +671,7 @@ class Laptop  : public Product{
 		    }
 		
 		    for (int i = 0; i < count; i++){
-		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] <<"Quantity:"<<QTY[i]<<endl;
+		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] <<"Quantity:"<<QTY[i]<<endl;
 		    }
 		
 		    int choice;
@@ -702,7 +702,7 @@ class Laptop  : public Product{
 		    cout << "\nLaptop List:\n";
 		    while (temp != nullptr) {
 		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-		             << "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB" << endl;
+		             << "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB" << endl;
 		        temp = temp->next;
 		    }
 		
@@ -772,7 +772,7 @@ class Laptop  : public Product{
 		        	cout<<"This is the product's details:"<<endl;
 		        	cout<<"-------------------------------------------------------"<<endl;
 		            cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-					<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+					<< "\tPrice: " << <<fixed<<setprecision(2)temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 					
 					cout<<"How many you want to buy?";
 					cin>>buy_qty;
@@ -983,7 +983,7 @@ class Handphone : public Product{
 		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
 		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-				<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+				<< "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		}
@@ -993,7 +993,7 @@ class Handphone : public Product{
 		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
 		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-				<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+				<< "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		    cout<<"Enter the Product ID you want to change :";
@@ -1074,7 +1074,7 @@ class Handphone : public Product{
 		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
 		                if (Cache.price == searchPrice) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << endl;
 		                }
 		            }
 		            readfile3.close();
@@ -1094,7 +1094,7 @@ class Handphone : public Product{
 		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
 		                if (Cache.model == searchModel) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << endl;
 		                }
 		            }
 		            readfile4.close();
@@ -1122,7 +1122,7 @@ class Handphone : public Product{
 		    cout << "Original handphone data:\n";
 		    for (int i = 0; i < count; i++)
 		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] 
-				<< " Price : RM" << price[i] << " RAM : " << RAM[i] << "Quantity" << QTY[i] <<endl;
+				<< " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] << "Quantity" << QTY[i] <<endl;
 		
 		    int choice;
 		    cout << "Choose sort order:\n";
@@ -1151,7 +1151,7 @@ class Handphone : public Product{
 		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
 		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-		             << "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB" << "\tQuantity:" << temp->quantity << endl;
+		             << "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB" << "\tQuantity:" << temp->quantity << endl;
 		        temp = temp->next;
 		    }
 		    cout << "Enter the Product ID you want to delete: ";
@@ -1581,7 +1581,7 @@ void editHandphoneCart(login_system &user){
     for(int i = 0; i < count; i++){
         if(H_record[i].U_ID == cur_U_ID && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
             cout << "Order ID: " << H_record[i].O_ID << " Product ID: " << H_record[i].P_ID 
-                 << " Model: " << H_record[i].model << " Price: " << H_record[i].price 
+                 << " Model: " << H_record[i].model << " Price: " <<fixed<<setprecision(2)<< H_record[i].price 
                  << " Quantity Purchase: " << H_record[i].quantity 
                  << " Total Price: " << H_record[i].total_price << endl;
         }
@@ -1657,7 +1657,7 @@ void editLaptopCart(login_system &user){
     for(int i = 0; i < count; i++){
         if(L_record[i].U_ID == cur_U_ID && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
             cout << "Order ID: " << L_record[i].O_ID << " Product ID: " << L_record[i].P_ID 
-                 << " Model: " << L_record[i].model << " Price: " << L_record[i].price 
+                 << " Model: " << L_record[i].model << " Price: " <<fixed<<setprecision(2)<< L_record[i].price 
                  << " Quantity Purchase: " << L_record[i].quantity 
                  << " Total Price: " << L_record[i].total_price << endl;
         }
@@ -1715,7 +1715,7 @@ void viewCart(login_system &user){
 	}
 	while (readfile >>O_ID>>U_ID>>P_ID>>model>>price>>quantity>>total_price>>status){
 		if(U_ID == cur_U_ID && status == "pending"){
-			cout <<"Order ID: "<<O_ID<<" Product ID: "<<P_ID<<" Model: "<<model<<" Price: "<<price<<" Quantity Purchase: "<<quantity<<" Total Price: "<<total_price<<endl;
+			cout <<"Order ID: "<<O_ID<<" Product ID: "<<P_ID<<" Model: "<<model<<" Price: "<<fixed<<setprecision(2)<<price<<" Quantity Purchase: "<<quantity<<" Total Price: "<<total_price<<endl;
 		}
 	}
 	readfile.close();
@@ -1752,7 +1752,7 @@ void deleteHandphoneCart(login_system &user){
     for(int i = 0; i < count; i++){
         if(H_record[i].U_ID == cur_U_ID && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
             cout << "Order ID: " << H_record[i].O_ID << " Product ID: " << H_record[i].P_ID 
-                 << " Model: " << H_record[i].model << " Price: " << H_record[i].price 
+                 << " Model: " << H_record[i].model << " Price: " <<fixed<<setprecision(2)<< H_record[i].price 
                  << " Quantity Purchase: " << H_record[i].quantity 
                  << " Total Price: " << H_record[i].total_price << endl;
         }
@@ -1824,7 +1824,7 @@ void deleteLaptopCart(login_system &user){
     for(int i = 0; i < count; i++){
         if(L_record[i].U_ID == cur_U_ID && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
             cout << "Order ID: " << L_record[i].O_ID << " Product ID: " << L_record[i].P_ID 
-                 << " Model: " << L_record[i].model << " Price: " << L_record[i].price 
+                 << " Model: " << L_record[i].model << " Price: " <<fixed<<setprecision(2)<< L_record[i].price 
                  << " Quantity Purchase: " << L_record[i].quantity 
                  << " Total Price: " << L_record[i].total_price << endl;
         }
@@ -1894,7 +1894,7 @@ void makepayment(string userID){
     for(int i = 0; i < count; i++){
         if(record[i].U_ID == userID && record[i].status == "pending"){
             cout << "Order ID: " << record[i].O_ID << " Product ID: " << record[i].P_ID 
-                 << " Model: " << record[i].model << " Price: " << record[i].price 
+                 << " Model: " << record[i].model << " Price: " <<fixed<<setprecision(2)<< record[i].price 
                  << " Quantity Purchase: " << record[i].quantity 
                  << " Total Price: " << record[i].total_price << endl;
         }
@@ -1987,7 +1987,7 @@ void salesSummaryReport(){
     openfile <<"===   SUMMARY REPORT   === "
     		 <<"\nTotal Records        :" << count
     		 <<"\nPending Bookings     :" << pending_order
-    		 <<"\nPaid Bookings        :" << paid_order << fixed << setprecision(2)
+    		 <<"\nPaid Bookings        :" << paid_order 
     		 <<"\nTotal Amount Sales   : RM" << total_amount_sales
     		 <<"\nTotal Amount Received: RM" << total_amount_paid_sales <<endl;
     openfile.close();
@@ -2049,7 +2049,6 @@ void consumptionReport(string userID){
     		 <<"\nTotal Records        :" << count
     		 <<"\nPending Bookings     :" << pending_order
     		 <<"\nPaid Bookings        :" << paid_order 
-			 << fixed << setprecision(2)
     		 <<"\nTotal Amount Paid   : RM" << total_amount_paid_sales <<endl;
     openfile.close();
     cout<<"Report Successful Generated."<<endl;
