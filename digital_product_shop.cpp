@@ -285,7 +285,6 @@ public:
         }
     }
 };
-
 //selectionsort
 class SelectionSort {
 public:
@@ -322,13 +321,13 @@ public:
 
     void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
         for (int i = 0; i < n; i++){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<"Quantity: "<< QTY[i] << endl;
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<" Quantity : "<< QTY[i] << endl;
         }
     }
     
     void printterbalik(string model[], string brand[], double price[], int RAM[],int QTY[], int count){
     	for (int i = count - 1; i >= 0; i--){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<"Quantity: "<< QTY[i]  << endl;
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<" Quantity : "<< QTY[i]  << endl;
         }
 	}
 
@@ -349,7 +348,6 @@ private:
         yp = temp;
     }
 };
-
 //inserttionsort
 class InsertSort {
 public:
@@ -406,15 +404,16 @@ public:
     void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
         for (int i = 0; i < n; i++){
             cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] 
-			<< " RAM : " << RAM[i] << "Quantity:" << QTY[i] << endl;
+			<< " RAM : " << RAM[i] << " Quantity : " << QTY[i] << endl;
         }
     }
     void printterbalik(string model[], string brand[], double price[], int RAM[],int QTY[], int count){
     	for (int i = count - 1; i >= 0; i--){
     		cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] 
-			<< " RAM : " << RAM[i] << "Quantity:" << QTY[i] << endl;
+			<< " RAM : " << RAM[i] << " Quantity : " << QTY[i] << endl;
 		}
 	}
+
 };
 
 class Product{
@@ -609,7 +608,7 @@ class Laptop  : public Product{
 		    HashTable modelTable;
 		
 		    ifstream readfile2("Laptop.txt");
-		    while (readfile2 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
+		    while (readfile2 >> Cache.P_ID >>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		        priceTable.hash(Cache.price);
 		        modelTable.hash(Cache.model);
 		    }
@@ -626,10 +625,10 @@ class Laptop  : public Product{
 		            cout << "Price found! Matching laptops:" << endl;
 		
 		            ifstream readfile3("Laptop.txt");
-		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
+		            while (readfile3 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.price == searchPrice) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << " " << Cache.quantity << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << " Quantity : " << Cache.quantity << endl;
 		                }
 		            }
 		            readfile3.close();
@@ -643,10 +642,10 @@ class Laptop  : public Product{
 		        if (modelTable.exists(searchModel)) {
 		            cout << "Model found! Matching laptops:" << endl;
 		            ifstream readfile4("Laptop.txt");
-		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
+		            while (readfile4 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.model == searchModel) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << "Quantity" << Cache.quantity << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << ", Quantity: " << Cache.quantity << endl;
 		                }
 		            }
 		            readfile4.close();
@@ -659,19 +658,19 @@ class Laptop  : public Product{
 			system("pause");
 		}
 		void sortLaptop() {
-		    string model[TABLE_SIZE], brand[TABLE_SIZE];
+		    string model[TABLE_SIZE], brand[TABLE_SIZE],pid[TABLE_SIZE];
 		    double price[TABLE_SIZE];
 			int RAM[TABLE_SIZE], QTY[TABLE_SIZE];
 		    int count = 0;
 		
 		    ifstream readfile2("Laptop.txt");
 		
-		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count]>>QTY[count]) {
+		    while (readfile2 >> pid[count] >> model[count] >> brand[count] >> price[count] >> RAM[count]>>QTY[count]) {
 		        count++;
 		    }
 		
 		    for (int i = 0; i < count; i++){
-		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] <<"Quantity:"<<QTY[i]<<endl;
+		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] <<" Quantity : "<<QTY[i]<<endl;
 		    }
 		
 		    int choice;
@@ -772,7 +771,7 @@ class Laptop  : public Product{
 		        	cout<<"This is the product's details:"<<endl;
 		        	cout<<"-------------------------------------------------------"<<endl;
 		            cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-					<< "\tPrice: " << <<fixed<<setprecision(2)temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+					<< "\tPrice: " << fixed<<setprecision(2)<<temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 					
 					cout<<"How many you want to buy?";
 					cin>>buy_qty;
@@ -1052,7 +1051,7 @@ class Handphone : public Product{
 		    HashTable modelTable;
 		
 		    ifstream readfile2("Handphone.txt");
-		    while (readfile2 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		    while (readfile2 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		        priceTable.hash(Cache.price);
 		        modelTable.hash(Cache.model);
 		    }
@@ -1071,10 +1070,10 @@ class Handphone : public Product{
 		            cout << "Price found! Matching handphones:" << endl;
 		
 		            ifstream readfile3("Handphone.txt");
-		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		            while (readfile3 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.price == searchPrice) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << " Quantity : " << Cache.quantity <<endl;
 		                }
 		            }
 		            readfile3.close();
@@ -1091,10 +1090,10 @@ class Handphone : public Product{
 		            cout << "Model found! Matching handphones:" << endl;
 		
 		            ifstream readfile4("Handphone.txt");
-		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		            while (readfile4 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.model == searchModel) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << endl;
+		                         << ", Price: RM " <<fixed<<setprecision(2)<< Cache.price << ", RAM: " << Cache.RAM << " Quantity : " << Cache.quantity <<endl;
 		                }
 		            }
 		            readfile4.close();
@@ -1108,14 +1107,14 @@ class Handphone : public Product{
 		    system("pause");
 		}
 		void sortHandphone() {
-		    string model[TABLE_SIZE], brand[TABLE_SIZE];
+		    string model[TABLE_SIZE], brand[TABLE_SIZE],pid[TABLE_SIZE];
 		    double price[TABLE_SIZE];
 			int RAM[TABLE_SIZE],QTY[TABLE_SIZE];
 		    int count = 0;
 		
 		    ifstream readfile2("Handphone.txt");
 		
-		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count] >> QTY[count]) {
+		    while (readfile2 >> pid[count]  >> model[count] >> brand[count] >> price[count] >> RAM[count] >> QTY[count]) {
 		        count++;
 		    }
 		
@@ -1125,7 +1124,7 @@ class Handphone : public Product{
 				<< " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] << "Quantity" << QTY[i] <<endl;
 		
 		    int choice;
-		    cout << "Choose sort order:\n";
+		    cout << "Choose sort order by price from...\n";
 		    cout << "1. Low to High\n";
 		    cout << "2. High to Low\n";
 		    cout << "Enter choice (1 or 2): ";
@@ -1383,19 +1382,19 @@ class User : public login_system{
 	                    break;
 	                }
 					case 7: {
-	                      
+	                    L.searchLaptop();
 	                    break;
 	                }
 					case 8: {
-	                      
+	                	H.searchHandphone();
 	                    break;
 	                }
 	                case 9: {
-	                      
+	                    L.sortLaptop();
 	                    break;
 	                }
 	                case 10: {
-	                      
+	                    H.sortHandphone();
 	                    break;
 	                }
 	                case 11:
@@ -1420,6 +1419,8 @@ class User : public login_system{
 	        }
 	        return 0;
 	    }
+
+
 };
 class Admin : public login_system{
 	public:
@@ -1453,6 +1454,8 @@ class Admin : public login_system{
 	        int back = 0;
 			Laptop laptop;
 			Handphone handphone;
+			User u;
+			Admin a;
 	        while (back == 0) {
 	            cout << "-----------------------------" << endl;
 	            cout << "     Admin Function Menu     " << endl;
