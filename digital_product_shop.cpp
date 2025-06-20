@@ -11,6 +11,9 @@ bool containH(string input);
 bool containL(string input);
 void makepayment(string userID);
 void salesSummaryReport();
+void viewsalesSummaryReport();
+void consumptionReport(string userID);
+void viewconsumptionReport(string userID);
 struct purchaseRecord {
     string O_ID;
     string U_ID;
@@ -1348,7 +1351,7 @@ class User : public login_system{
 	            cout << "     User Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
 	            cout << "1. Buy Laptop\n2. Buy Handphone\n3. Edit Laptop Record\n4. Edit Handphone Record\n5. Display Product Available\n6. View Cart";
-				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Cancel Laptop Order\n12.Cancel Handphone Order\n13.Make Payment\n14.Display consumption record\n-1. Back to previous" << endl;
+				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Cancel Laptop Order\n12.Cancel Handphone Order\n13.Make Payment\n14.Generate Consumption Report\n15.View Consumption Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            cin >> choice;
 	            switch (choice) {
@@ -1404,6 +1407,12 @@ class User : public login_system{
                 	case 13:
 	                	makepayment(getUserID());
 	                	break;
+	                case 14:
+	                	consumptionReport(getUserID());
+	                	break;
+	                case 15:
+	                	viewconsumptionReport(getUserID());
+	                	break;
 	                case -1:
 	                    return 0;  
 	                    break;
@@ -1448,7 +1457,8 @@ class Admin : public login_system{
 	            cout << "-----------------------------" << endl;
 	            cout << "     Admin Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
-	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Sales Suummary Report\n-1. Back to previous" << endl;
+	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone";
+				cout<<"\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Generate Sales Summary Report\n14.View Sales Summary Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            cin >> choice;
 	            switch (choice) {
@@ -1500,6 +1510,9 @@ class Admin : public login_system{
 	                	break;
 	                case 13:
 	                	salesSummaryReport();
+	                	break;
+	                case 14:
+	                	viewsalesSummaryReport();
 	                	break;
 	                case -1:
 	                    return 0;  
@@ -1978,7 +1991,76 @@ void salesSummaryReport(){
     		 <<"\nTotal Amount Sales   : RM" << total_amount_sales
     		 <<"\nTotal Amount Received: RM" << total_amount_paid_sales <<endl;
     openfile.close();
-    ifstream readfile1("summary_sales_report.txt");
+    cout<<"Report Successful Generated."<<endl;
+}
+
+void viewsalesSummaryReport(){
+	string line;
+	ifstream readfile1("summary_sales_report.txt");
+    if (readfile1.is_open()) {
+        while (getline(readfile1, line)) {
+            cout << line << endl;
+        }
+        readfile1.close();
+    } else {
+        cout << "Failed to open the file." << endl;
+    }
+}
+
+void consumptionReport(string userID){
+	purchaseRecord record[1000];
+    int count = 0, pending_order = 0, paid_order=0,total_amount_paid_sales=0;
+    string line,filename;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, order_id;
+    double price, total_price;
+    int quantity;
+    int found = 0, price_not_match=0;
+    string selected_P_ID;
+    filename = "Consumption_Report_" + userID+".txt";
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        record[count].O_ID = O_ID;
+        record[count].U_ID = U_ID;
+        record[count].P_ID = P_ID;
+        record[count].model = model;
+        record[count].price = price;
+        record[count].quantity = quantity;
+        record[count].total_price = total_price;
+        record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    for(int i = 0; i < count; i++){
+    	if(record[i].U_ID == userID){
+    		if(record[i].status == "pending"){
+				pending_order++;
+	        }else{
+	        	total_amount_paid_sales += record[i].total_price;
+	        	paid_order++;
+			}
+		}
+    }
+    ofstream openfile(filename);
+    openfile <<"===   SUMMARY REPORT   === "
+    		 <<"\nTotal Records        :" << count
+    		 <<"\nPending Bookings     :" << pending_order
+    		 <<"\nPaid Bookings        :" << paid_order 
+			 << fixed << setprecision(2)
+    		 <<"\nTotal Amount Paid   : RM" << total_amount_paid_sales <<endl;
+    openfile.close();
+    cout<<"Report Successful Generated."<<endl;
+}
+
+void viewconsumptionReport(string userID){
+	purchaseRecord record[1000];
+    string line,filename;
+    filename = "Consumption_Report_" + userID+".txt";
+
+    ifstream readfile1(filename);
     if (readfile1.is_open()) {
         while (getline(readfile1, line)) {
             cout << line << endl;
