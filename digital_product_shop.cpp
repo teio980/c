@@ -7,6 +7,18 @@
 using namespace std;
 const int TABLE_SIZE = 101;
 bool checkEmpty(string input);
+bool containH(string input);
+bool containL(string input);
+struct purchaseRecord {
+    string O_ID;
+    string U_ID;
+    string P_ID;
+    string model;
+    double price;
+    int quantity;
+    double total_price;
+    string status;
+};
 struct Person{
 	string username;
 	string password;
@@ -96,7 +108,6 @@ class login_system{
 		P.f_password = "";
 		P.f_identity = "";
 		P.user_id = "";
-		cout<<"Your Personal Data Have Been Clear."<<endl;
 	}
 	int login(){
 		check_identity();
@@ -123,7 +134,6 @@ class login_system{
 		exit(0);
 	}
 	int register_user(){
-		system("cls");
 		set("user");
 		string line;
 		int line_count = 1;
@@ -165,6 +175,12 @@ class login_system{
 	void set(string Identity){
 		P.identity = Identity;
 	}
+	string getUserID(){
+		return P.user_id;
+	}
+	friend void editHandphoneCart(login_system &user);
+	friend void editLaptopCart(login_system &user);
+	friend void viewCart(login_system &user);
 };
 class HashTable {
 public:
@@ -283,7 +299,7 @@ public:
         cout << endl;
     }
     
-    void sortWithRecord(int price[], string model[], string brand[], int RAM[], int n) {
+    void sortWithRecord(double price[], string model[], string brand[], int RAM[],int QTY[], int n) {
         int i, j, min_idx;
         for (i = 0; i < n - 1; i++) {
             min_idx = i;
@@ -297,13 +313,13 @@ public:
         }
     }
 
-    void printFull(string model[], string brand[], int price[], int RAM[], int n) {
+    void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
         for (int i = 0; i < n; i++){
             cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
         }
     }
     
-    void printterbalik(string model[], string brand[], int price[], int RAM[], int count){
+    void printterbalik(string model[], string brand[], double price[], int RAM[],int QTY[], int count){
     	for (int i = count - 1; i >= 0; i--){
             cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
         }
@@ -312,6 +328,11 @@ public:
 private:
     void swap(int &xp, int &yp) {
         int temp = xp;
+        xp = yp;
+        yp = temp;
+    }
+    void swap(double &xp, double &yp) {
+        double temp = xp;
         xp = yp;
         yp = temp;
     }
@@ -338,8 +359,9 @@ public:
         }
     }
 
-    void insertionsortall(int price[], string model[], string brand[], int RAM[], int n) {
-        int i, keyPrice, j, keyRAM;
+    void insertionsortall(double price[], string model[], string brand[], int RAM[], int QTY[], int n) {
+        int i,  j, keyRAM, keyQTY;
+        double keyPrice;
         string keyModel, keyBrand;
 
         for (i = 1; i < n; i++) {
@@ -347,6 +369,7 @@ public:
             keyModel = model[i];
             keyBrand = brand[i];
             keyRAM = RAM[i];
+            keyQTY = QTY[i];
 
             j = i - 1;
 
@@ -355,12 +378,14 @@ public:
                 model[j + 1] = model[j];
                 brand[j + 1] = brand[j];
                 RAM[j + 1] = RAM[j];
+                QTY[j + 1] = QTY[j];
                 j = j - 1;
             }
             price[j + 1] = keyPrice;
             model[j + 1] = keyModel;
             brand[j + 1] = keyBrand;
             RAM[j + 1] = keyRAM;
+            QTY[j + 1] = keyQTY;
         }
     }
 
@@ -371,14 +396,16 @@ public:
         cout << endl;
     }
 
-    void printFull(string model[], string brand[], int price[], int RAM[], int n) {
+    void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
         for (int i = 0; i < n; i++){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+            cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] 
+			<< " RAM : " << RAM[i] << "Quantity:" << QTY[i] << endl;
         }
     }
-    void printterbalik(string model[], string brand[], int price[], int RAM[], int count){
+    void printterbalik(string model[], string brand[], double price[], int RAM[],int QTY[], int count){
     	for (int i = count - 1; i >= 0; i--){
-    		cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+    		cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] 
+			<< " RAM : " << RAM[i] << "Quantity:" << QTY[i] << endl;
 		}
 	}
 };
@@ -389,7 +416,7 @@ class Product{
 		string P_ID;
 	    string model;
 	    string brand;
-	    float price;
+	    double price;
 	    int RAM;
 	    int quantity;
 	    Item *next;
@@ -397,7 +424,6 @@ class Product{
 	virtual void add_record() = 0;
 	virtual void display() = 0;
 	virtual void edit() = 0;
-	
 	virtual void deleteproduct() = 0;
 };
 class Laptop  : public Product{
@@ -414,13 +440,14 @@ class Laptop  : public Product{
 			cout << "Unable to open file Laptop.txt"<<endl;
         	exit(0);
 			}
-			while (readfile >>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM){
+			while (readfile >>Cache.P_ID>>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >>Cache.quantity){
 				Item* newItem = new Item();
 		        newItem->model = Cache.model;
 		        newItem->brand = Cache.brand;
 		        newItem->price = Cache.price;
 		        newItem->RAM = Cache.RAM;
-		        newItem->P_ID = "L" + to_string(count++);
+		        newItem->quantity = Cache.quantity;
+		        newItem->P_ID = Cache.P_ID;
 		        newItem->next = nullptr;
 		        if (head == nullptr) {
 		            head = newItem;
@@ -435,42 +462,39 @@ class Laptop  : public Product{
 		}
     	void add_record() override {
 		    int size;
+		    int L_ID,H_ID,O_ID;
 		    do{
-		    cout << "How many Laptop do you want to add? ";
+		    cout << "How many laptop do you want to add? ";
 		    cin >> size;
 		    if (size <= 0) {
-		        cout << "Invalid number of Laptop!\n";
+		        cout << "Invalid number of laptop!\n";
 		        return;
 		    }
 			}while(size<=0);
-		    ifstream readfile("Laptop.txt");
-		    if (!readfile) {
-		        cout << "Unable to open file Laptop.txt" << endl;
-		        exit(0);
-		    }
-		    string line;
-		    int count = 0;
-		    while (getline(readfile, line)) {
-		        count++;
-		    }
-		    readfile.close();
 		    ofstream writefile("Laptop.txt", ios::app);
 		    if (!writefile) {
-		        cout << "Unable to open file Laptop.txt for writing!" << endl;
+		        cout << "Unable to open file Handphone.txt for writing!" << endl;
 		        exit(0);
 		    }
 		    for (int i = 0; i < size; i++) {
-		        Item* newItem = new Item();
-		        newItem->P_ID = "L" + to_string(count + i); 
+		    	Item* newItem = new Item();
+		    	ifstream readfile("id_record.txt");
+			    if (!readfile) {
+			        cout << "Unable to open file Laptop.txt" << endl;
+			        exit(0);
+			    }
+			    readfile >> L_ID >> H_ID >> O_ID;
+			    readfile.close();
+		        newItem->P_ID = "L" + to_string(L_ID); 
 		        cout << "\nEnter details for Laptop #" << (i + 1) << endl;
 		        cout << "-------------------------" << endl;
 		        cout << "Enter Laptop Model: ";
 		        cin.ignore();
 		        getline(cin, newItem->model);
 		        while (checkEmpty(newItem->model)) {
-				    cout << "- Input cannot be empty or contain space. "<<endl;
+				    cout << "- Input cannot be empty or contain space."<<endl;
 				    cout<<"You may use the _ to replace"<<endl;
-				    cout << "Enter Laptop Model: ";
+				    cout<<"Enter Laptop Model: ";
 				    getline(cin, newItem->model);
 				}
 		        cout << "Enter Brand: ";
@@ -497,10 +521,20 @@ class Laptop  : public Product{
 		            }
 		            temp->next = newItem;
 		        }
-		        writefile << newItem->model << " " 
-                  << newItem->brand << " " 
-                  << newItem->price << " " 
+                  writefile 
+				  <<newItem->P_ID <<" " 
+				  <<newItem->model << " " 
+				  <<newItem->brand << " " 
+                  << newItem->price << " "
+				  << newItem->quantity << " " 
                   << newItem->RAM << endl;
+                ofstream openfile("id_record.txt");
+			    if (!openfile) {
+			        cout << "Unable to open file Laptop.txt" << endl;
+			        exit(0);
+			    }
+			    openfile << (L_ID+1) <<" "<< H_ID << " "<< O_ID;
+			    openfile.close();
 		        cout << "Laptop added successfully!\n";
 		    }
 		    writefile.close(); 
@@ -541,19 +575,34 @@ class Laptop  : public Product{
 		            
 		            cout << "Enter New Quantity : ";
 		            cin >> temp->quantity;
-		            
-		            cout << "Laptop details updated successfully!\n";
-		            return;
+		            break;
 		        }
 		        temp = temp->next;
 		    }
+		    
+		    ofstream outFile("Laptop.txt"); 
+		    if (!outFile) {
+		        cerr << "Error opening file for writing!" << endl;
+		        return;
+		    }
+		    
+		    temp = head;
+		    while (temp != nullptr) {
+		        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
+		                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
+		        temp = temp->next;
+		    }
+		    
+		    outFile.close();
+		    cout << "Product updated successfully!" << endl;
+		    return;
 		}
 		void searchLaptop() {
 		    HashTable priceTable;
 		    HashTable modelTable;
 		
 		    ifstream readfile2("Laptop.txt");
-		    while (readfile2 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		    while (readfile2 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		        priceTable.hash(Cache.price);
 		        modelTable.hash(Cache.model);
 		    }
@@ -570,10 +619,10 @@ class Laptop  : public Product{
 		            cout << "Price found! Matching laptops:" << endl;
 		
 		            ifstream readfile3("Laptop.txt");
-		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		            while (readfile3 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.price == searchPrice) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << " " << Cache.quantity << endl;
 		                }
 		            }
 		            readfile3.close();
@@ -587,10 +636,10 @@ class Laptop  : public Product{
 		        if (modelTable.exists(searchModel)) {
 		            cout << "Model found! Matching laptops:" << endl;
 		            ifstream readfile4("Laptop.txt");
-		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM) {
+		            while (readfile4 >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.model == searchModel) {
 		                    cout << "Model: " << Cache.model << ", Brand: " << Cache.brand
-		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << endl;
+		                         << ", Price: RM " << Cache.price << ", RAM: " << Cache.RAM << "Quantity" << Cache.quantity << endl;
 		                }
 		            }
 		            readfile4.close();
@@ -604,17 +653,18 @@ class Laptop  : public Product{
 		}
 		void sortLaptop() {
 		    string model[TABLE_SIZE], brand[TABLE_SIZE];
-		    int price[TABLE_SIZE], RAM[TABLE_SIZE];
+		    double price[TABLE_SIZE];
+			int RAM[TABLE_SIZE], QTY[TABLE_SIZE];
 		    int count = 0;
 		
 		    ifstream readfile2("Laptop.txt");
 		
-		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count]) {
+		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count]>>QTY[count]) {
 		        count++;
 		    }
 		
 		    for (int i = 0; i < count; i++){
-		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] <<"Quantity:"<<QTY[i]<<endl;
 		    }
 		
 		    int choice;
@@ -625,14 +675,14 @@ class Laptop  : public Product{
 		    cin >> choice;
 		
 		    SelectionSort s;
-		    s.sortWithRecord(price, model, brand, RAM, count);
+		    s.sortWithRecord(price, model, brand, RAM, QTY, count);
 		
 		    if (choice == 1) {
 		        cout << "Sorted laptop data (Low to High):\n";
-		        s.printFull(model, brand, price, RAM, count);
+		        s.printFull(model, brand, price, RAM, QTY, count);
 		    } else if (choice == 2) {
 		        cout << "Sorted laptop data (High to Low):\n";
-		        s.printterbalik(model, brand, price, RAM, count);
+		        s.printterbalik(model, brand, price, RAM, QTY, count);
 		    } else {
 		        cout << "Invalid choice!" << endl;
 		    }
@@ -663,6 +713,20 @@ class Laptop  : public Product{
 		                prev->next = temp->next;
 		            }
 		            delete temp;
+		            ofstream outFile("Laptop.txt"); 
+				    if (!outFile) {
+				        cerr << "Error opening file for writing!" << endl;
+				        return;
+				    }
+				    
+				    temp = head;
+				    while (temp != nullptr) {
+				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
+				                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
+				        temp = temp->next;
+				    }
+				    
+				    outFile.close();
 		            cout << "Laptop deleted successfully!\n";
 		            return;
 		        }
@@ -673,7 +737,125 @@ class Laptop  : public Product{
 		    cout << "Laptop with Product ID " << product_id << " not found.\n";
 		}
 
-
+		void buyLaptop(string U_ID){
+			string product_id;
+			int L_ID,H_ID,O_ID;
+			string order_id;
+			login_system L;
+			int found = 0;
+			int buy_qty;
+			double total_price;
+			ifstream readfile("id_record.txt");
+		    if (!readfile) {
+		        cout << "Unable to open file Laptop.txt" << endl;
+		        exit(0);
+		    }
+		    readfile >> L_ID >> H_ID >> O_ID;
+		    readfile.close();
+		    order_id = "ORD" + to_string(O_ID);
+			ofstream openfile("purchase_record.txt",ios::app);
+			cin.ignore();
+			cout<<"Enter the Product ID you want to add to cart:";
+			getline(cin,product_id);
+			
+			temp = head;
+		    while (temp != nullptr) {
+		        if (temp->P_ID == product_id) {
+		        	found = 1;
+		        	cout<<"This is the product's details:"<<endl;
+		        	cout<<"-------------------------------------------------------"<<endl;
+		            cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
+					<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+					
+					cout<<"How many you want to buy?";
+					cin>>buy_qty;
+					while(buy_qty>temp->quantity){
+						cout<<"Invalid buy quantity. Please Try Again."<<endl;
+						cout<<"How many you want to buy?";
+						cin>>buy_qty;
+					}
+					total_price = buy_qty * temp->price;
+					if (!openfile) {
+				        cerr << "Error opening file  purchase_record.txt for writing!" << endl;
+				        return;
+				    }
+					openfile << order_id << " " << U_ID << " " <<  temp->P_ID << " " << temp->model << " " << temp->price << " " << buy_qty << " " << total_price << " pending" << endl;
+					openfile.close();
+					cout<<"Your order successful add to cart"<<endl;
+					ofstream openfile("id_record.txt");
+				    if (!openfile) {
+				        cout << "Unable to open file Laptop.txt" << endl;
+				        exit(0);
+				    }
+				    openfile << L_ID <<" "<< H_ID << " "<< (O_ID+1);
+				    openfile.close();
+					temp->quantity = temp->quantity - buy_qty;
+					
+					ofstream outFile("Laptop.txt"); 
+				    if (!outFile) {
+				        cerr << "Error opening file for writing!" << endl;
+				        return;
+				    }
+				    
+				    temp = head;
+				    while (temp != nullptr) {
+				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
+				                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
+				        temp = temp->next;
+				    }
+				    outFile.close();
+					
+		            break;
+		        }
+		        temp = temp->next;
+		    }
+		    
+		    if(found == 0){
+		    	cout<<"Invalid Product ID. Please Try Again."<<endl;
+			}
+		}
+		void updateLaptopLinkedList(string selected_P_ID, int change_quantity){
+			temp = head;
+			int found = 0;
+			while (temp != nullptr) {
+	        if (temp->P_ID == selected_P_ID) {
+	        	found = 1;
+	        	if(change_quantity<0){
+	        		change_quantity = change_quantity * -1;
+	        		temp->quantity += change_quantity;
+				}
+				else if(change_quantity>=0){
+					temp->quantity -= change_quantity;
+				}
+				break;
+		        }
+		        temp = temp->next;
+		    }
+		
+		    if (found==0) {
+		        cout << "Product ID " << selected_P_ID << " not found in the linked list!" << endl;
+		        return;
+		    }
+		    ofstream openfile("Laptop.txt");
+		    if (!openfile) {
+		        cerr << "Error opening Laptop.txt for writing!" << endl;
+		        return;
+		    }
+		
+		    temp = head;
+		    while (temp != nullptr) {
+		        openfile << temp->P_ID << " " 
+		                << temp->model << " " 
+		                << temp->brand << " "
+		                << temp->price << " " 
+		                << temp->RAM << " " 
+		                << temp->quantity << endl;
+		        temp = temp->next;
+		    }
+		
+		    openfile.close();
+		    cout<<"Laptop data updated"<<endl;
+		}
 };
 class Handphone : public Product{
 	private:
@@ -687,16 +869,17 @@ class Handphone : public Product{
     		ifstream readfile("Handphone.txt");
 		    
 		    if(!readfile){
-			cout << "Unable to open file Laptop.txt"<<endl;
+			cout << "Unable to open file Handphone.txt"<<endl;
         	exit(0);
 			}
-			while (readfile >>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM){
+			while (readfile >>Cache.P_ID>>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity){
 				Item* newItem = new Item();
 		        newItem->model = Cache.model;
 		        newItem->brand = Cache.brand;
 		        newItem->price = Cache.price;
 		        newItem->RAM = Cache.RAM;
-		        newItem->P_ID = "H" + to_string(count++);
+		        newItem->quantity = Cache.quantity;
+		        newItem->P_ID = Cache.P_ID;
 		        newItem->next = nullptr;
 		        if (head == nullptr) {
 		            head = newItem;
@@ -711,6 +894,7 @@ class Handphone : public Product{
 		}
     	void add_record() override {
 		    int size;
+		    int L_ID,H_ID,O_ID;
 		    do{
 		    cout << "How many phones do you want to add? ";
 		    cin >> size;
@@ -719,35 +903,31 @@ class Handphone : public Product{
 		        return;
 		    }
 			}while(size<=0);
-		    ifstream readfile("Handphone.txt");
-		    if (!readfile) {
-		        cout << "Unable to open file Handphone.txt" << endl;
-		        exit(0);
-		    }
-		    string line;
-		    int count = 0;
-		    while (getline(readfile, line)) {
-		        count++;
-		    }
-		    readfile.close();
 		    ofstream writefile("Handphone.txt", ios::app);
 		    if (!writefile) {
 		        cout << "Unable to open file Handphone.txt for writing!" << endl;
 		        exit(0);
 		    }
 		    for (int i = 0; i < size; i++) {
-		        Item* newItem = new Item();
-		        newItem->P_ID = "H" + to_string(count + i); 
+		    	Item* newItem = new Item();
+		    	ifstream readfile("id_record.txt");
+			    if (!readfile) {
+			        cout << "Unable to open file Laptop.txt" << endl;
+			        exit(0);
+			    }
+			    readfile >> L_ID >> H_ID >>O_ID;
+			    readfile.close();
+		        newItem->P_ID = "H" + to_string(H_ID); 
 		        cout << "\nEnter details for Phone #" << (i + 1) << endl;
 		        cout << "-------------------------" << endl;
 		        cout << "Enter Handphone Model: ";
 		        cin.ignore();
 		        getline(cin, newItem->model);
-		        while (checkEmpty(newItem->brand)) {
+		        while (checkEmpty(newItem->model)) {
 				    cout << "- Input cannot be empty or contain space."<<endl;
 				    cout<<"You may use the _ to replace"<<endl;
 				    cout<<"Enter Hanphone Model: ";
-				    getline(cin, newItem->brand);
+				    getline(cin, newItem->model);
 				}
 		        cout << "Enter Brand: ";
 		        getline(cin, newItem->brand);
@@ -773,19 +953,30 @@ class Handphone : public Product{
 		            }
 		            temp->next = newItem;
 		        }
-		        writefile << newItem->model << " " 
-                  << newItem->brand << " " 
-                  << newItem->price << " " 
+                  writefile 
+				  <<newItem->P_ID <<" " 
+				  <<newItem->model << " " 
+				  <<newItem->brand << " " 
+                  << newItem->price << " "
+				  << newItem->quantity << " " 
                   << newItem->RAM << endl;
+                ofstream openfile("id_record.txt");
+			    if (!openfile) {
+			        cout << "Unable to open file Laptop.txt" << endl;
+			        exit(0);
+			    }
+			    openfile << L_ID <<" "<< (H_ID+1) <<" "<<O_ID;
+			    openfile.close();
 		        cout << "Phone added successfully!\n";
 		    }
 		    writefile.close(); 
 		}
 		void display() override {
 			temp = head;
-		    cout << "\nLaptop List:\n";
+		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
-		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
+				<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		}
@@ -794,7 +985,8 @@ class Handphone : public Product{
 			temp = head;
 		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
-		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
+				<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		    cout<<"Enter the Product ID you want to change :";
@@ -826,10 +1018,27 @@ class Handphone : public Product{
 		            cout << "Enter New Quantity : ";
 		            cin >> temp->quantity;
 		            cout << "Handphone details updated successfully!\n";
-		            return;
+		            break;
 		        }
 		        temp = temp->next;
 		    }
+		    
+		    ofstream outFile("Handphone.txt"); 
+		    if (!outFile) {
+		        cerr << "Error opening file for writing!" << endl;
+		        return;
+		    }
+		    
+		    temp = head;
+		    while (temp != nullptr) {
+		        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
+		                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
+		        temp = temp->next;
+		    }
+		    
+		    outFile.close();
+		    cout << "Product updated successfully!" << endl;
+		    return;
 		}
 		void searchHandphone() {
 		    HashTable priceTable;
@@ -893,18 +1102,20 @@ class Handphone : public Product{
 		}
 		void sortHandphone() {
 		    string model[TABLE_SIZE], brand[TABLE_SIZE];
-		    int price[TABLE_SIZE], RAM[TABLE_SIZE];
+		    double price[TABLE_SIZE];
+			int RAM[TABLE_SIZE],QTY[TABLE_SIZE];
 		    int count = 0;
 		
 		    ifstream readfile2("Handphone.txt");
 		
-		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count]) {
+		    while (readfile2 >> model[count] >> brand[count] >> price[count] >> RAM[count] >> QTY[count]) {
 		        count++;
 		    }
 		
 		    cout << "Original handphone data:\n";
 		    for (int i = 0; i < count; i++)
-		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] << " RAM : " << RAM[i] << endl;
+		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] 
+				<< " Price : RM" << price[i] << " RAM : " << RAM[i] << "Quantity" << QTY[i] <<endl;
 		
 		    int choice;
 		    cout << "Choose sort order:\n";
@@ -914,14 +1125,14 @@ class Handphone : public Product{
 		    cin >> choice;
 		
 		    InsertSort is;
-		    is.insertionsortall(price, model, brand, RAM, count);
+		    is.insertionsortall(price, model, brand, RAM, QTY, count);
 		
 		    if (choice == 1) {
 		        cout << "Sorted handphone data (Low to High):\n";
-		        is.printFull(model, brand, price, RAM, count);
+		        is.printFull(model, brand, price, RAM, QTY, count);
 		    } else if (choice == 2) {
 		        cout << "Sorted handphone data (High to Low):\n";
-		        is.printterbalik(model, brand, price, RAM, count);
+		        is.printterbalik(model, brand, price, RAM, QTY, count);
 		    } else {
 		        cout << "Invalid choice!" << endl;
 		    }
@@ -933,16 +1144,13 @@ class Handphone : public Product{
 		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
 		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
-		             << "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB" << endl;
+		             << "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB" << "\tQuantity:" << temp->quantity << endl;
 		        temp = temp->next;
 		    }
-		
 		    cout << "Enter the Product ID you want to delete: ";
 		    cin >> product_id;
-		
 		    temp = head;
 		    Item* prev = nullptr;
-		
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
 		            if (prev == nullptr) {
@@ -951,6 +1159,20 @@ class Handphone : public Product{
 		                prev->next = temp->next;
 		            }
 		            delete temp;
+		            ofstream outFile("Handphone.txt"); 
+				    if (!outFile) {
+				        cerr << "Error opening file for writing!" << endl;
+				        return;
+				    }
+				    
+				    temp = head;
+				    while (temp != nullptr) {
+				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
+				                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
+				        temp = temp->next;
+				    }
+				    
+				    outFile.close();
 		            cout << "Handphone deleted successfully!\n";
 		            return;
 		        }
@@ -959,8 +1181,127 @@ class Handphone : public Product{
 		    }
 		
 		    cout << "Handphone with Product ID " << product_id << " not found.\n";
+		   
+		}	
+		void buyHandphone(string U_ID){
+			string product_id;
+			int L_ID,H_ID,O_ID;
+			string order_id;
+			login_system L;
+			int found = 0;
+			int buy_qty;
+			double total_price;
+			ifstream readfile("id_record.txt");
+		    if (!readfile) {
+		        cout << "Unable to open file Laptop.txt" << endl;
+		        exit(0);
+		    }
+		    readfile >> L_ID >> H_ID >> O_ID;
+		    readfile.close();
+		    order_id = "ORD" + to_string(O_ID);
+			ofstream openfile("purchase_record.txt",ios::app);
+			cin.ignore();
+			cout<<"Enter the Product ID you want to add to cart:";
+			getline(cin,product_id);
+			
+			temp = head;
+		    while (temp != nullptr) {
+		        if (temp->P_ID == product_id) {
+		        	found = 1;
+		        	cout<<"This is the product's details:"<<endl;
+		        	cout<<"-------------------------------------------------------"<<endl;
+		            cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
+					<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+					
+					cout<<"How many you want to buy?";
+					cin>>buy_qty;
+					while(buy_qty>temp->quantity){
+						cout<<"Invalid buy quantity. Please Try Again."<<endl;
+						cout<<"How many you want to buy?";
+						cin>>buy_qty;
+					}
+					total_price = buy_qty * temp->price;
+					if (!openfile) {
+				        cerr << "Error opening file  purchase_record.txt for writing!" << endl;
+				        return;
+				    }
+					openfile << order_id << " " << U_ID << " " <<  temp->P_ID << " " << temp->model << " " << temp->price << " " << buy_qty << " " << total_price << " pending" << endl;
+					openfile.close();
+					cout<<"Your order successful add to cart"<<endl;
+					ofstream openfile("id_record.txt");
+				    if (!openfile) {
+				        cout << "Unable to open file Laptop.txt" << endl;
+				        exit(0);
+				    }
+				    openfile << L_ID <<" "<< H_ID << " "<< (O_ID+1);
+				    openfile.close();
+					temp->quantity = temp->quantity - buy_qty;
+					
+					ofstream outFile("Handphone.txt"); 
+				    if (!outFile) {
+				        cerr << "Error opening file for writing!" << endl;
+				        return;
+				    }
+				    
+				    temp = head;
+				    while (temp != nullptr) {
+				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
+				                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
+				        temp = temp->next;
+				    }
+				    outFile.close();
+					
+		            break;
+		        }
+		        temp = temp->next;
+		    }
+		    
+		    if(found == 0){
+		    	cout<<"Invalid Product ID. Please Try Again."<<endl;
+			}
 		}
-
+		void updateHandphoneLinkedList(string selected_P_ID, int change_quantity){
+			temp = head;
+			int found = 0;
+			while (temp != nullptr) {
+	        if (temp->P_ID == selected_P_ID) {
+		            found = 1;
+		            if(change_quantity<0){
+	        		change_quantity = change_quantity * -1;
+	        		temp->quantity += change_quantity;
+					}
+					else if(change_quantity>=0){
+						temp->quantity -= change_quantity;
+					}
+		            break;
+		        }
+		        temp = temp->next;
+		    }
+		
+		    if (found==0) {
+		        cout << "Product ID " << selected_P_ID << " not found in the linked list!" << endl;
+		        return;
+		    }
+		    ofstream openfile("Handphone.txt");
+		    if (!openfile) {
+		        cerr << "Error opening Handphone.txt for writing!" << endl;
+		        return;
+		    }
+		
+		    temp = head;
+		    while (temp != nullptr) {
+		        openfile << temp->P_ID << " " 
+		                << temp->model << " " 
+		                << temp->brand << " "
+		                << temp->price << " " 
+		                << temp->RAM << " " 
+		                << temp->quantity << endl;
+		        temp = temp->next;
+		    }
+		
+		    openfile.close();
+		    cout<<"Handphone data updated"<<endl;
+	}
 };
 class User : public login_system{	
 	public:
@@ -975,11 +1316,11 @@ class User : public login_system{
 				cout<<"1.Login\n2.Register\n3.Back to previous"<<endl;
 				cout<<"Enter your choice:";
 				cin>>choice;
-				cin.ignore();
 				switch(choice){
 					case 1:
 						set("user");
-						back = login();
+						login();
+						back = functionMenu();
 						break;
 					case 2:
 						back = register_user();
@@ -991,6 +1332,78 @@ class User : public login_system{
 			}
 			return 0;
 		}
+		int functionMenu() {
+	        system("cls");
+	        int choice;
+	        int back = 0;
+	        Handphone H;
+	        Laptop L;
+			
+	        while (back == 0) {
+	            cout << "-----------------------------" << endl;
+	            cout << "     User Function Menu     " << endl;
+	            cout << "-----------------------------" << endl;
+	            cout << "1. Buy Laptop\n2. Buy Handphone\n3. Edit Laptop Record\n4. Edit Handphone Record\n5. Display Product Available\n6. View Cart";
+				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Display consumption record\n-1. Back to previous" << endl;
+	            cout << "Enter your choice:";
+	            cin >> choice;
+	            switch (choice) {
+	                case 1: {
+	                    L.display();
+	                    L.buyLaptop(getUserID());
+	                    break;
+	                }
+	                case 2: {
+	                    H.display();
+	                    H.buyHandphone(getUserID());
+	                    break;
+	                }
+	                case 3: {
+	                    editLaptopCart(*this);
+	                    break;
+	                }
+	                case 4: {
+	                    editHandphoneCart(*this);
+	                    break;
+	                }
+	                case 5: {
+	                    L.display();
+	                    H.display();
+	                    break;
+	                }
+	                case 6: {
+	                    viewCart(*this);
+	                    break;
+	                }
+					case 7: {
+	                      
+	                    break;
+	                }
+					case 8: {
+	                      
+	                    break;
+	                }
+	                case 9: {
+	                      
+	                    break;
+	                }
+	                case 10: {
+	                      
+	                    break;
+	                }
+	                case 11:
+	                	
+	                	break;
+	                case 12:
+	                	
+	                	break;
+	                case -1:
+	                    return 0;  
+	                    break;
+	            }
+	        }
+	        return 0;
+	    }
 };
 class Admin : public login_system{
 	public:
@@ -1114,9 +1527,197 @@ int main(){
 	return 0;
 }
 
+void editHandphoneCart(login_system &user){
+	Handphone H;
+    purchaseRecord H_record[1000];
+    int count = 0;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
+    double price, total_price;
+    int quantity, new_quantity, change_quantity;
+    int found = 0;
+    string selected_P_ID;
+    cur_U_ID = user.getUserID();
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        H_record[count].O_ID = O_ID;
+        H_record[count].U_ID = U_ID;
+        H_record[count].P_ID = P_ID;
+        H_record[count].model = model;
+        H_record[count].price = price;
+        H_record[count].quantity = quantity;
+        H_record[count].total_price = total_price;
+        H_record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    cout << "Your pending handphone orders:" << endl;
+    for(int i = 0; i < count; i++){
+        if(H_record[i].U_ID == cur_U_ID && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
+            cout << "Order ID: " << H_record[i].O_ID << " Product ID: " << H_record[i].P_ID 
+                 << " Model: " << H_record[i].model << " Price: " << H_record[i].price 
+                 << " Quantity Purchase: " << H_record[i].quantity 
+                 << " Total Price: " << H_record[i].total_price << endl;
+        }
+    }
+    cin.ignore();
+    cout << "Enter the Order ID you want to edit: ";
+    getline(cin, order_id);
+    cout << "Enter the new quantity: ";
+    cin >> new_quantity;
+    while(new_quantity < 1){
+        cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
+        coutr<<"If you want to cancel order, please go thought another function."<<endl;
+        cout << "Enter the new quantity: ";
+        cin >> new_quantity;
+    }
+    for(int i = 0; i < count; i++){
+        if(H_record[i].O_ID == order_id && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
+            found = 1;
+            selected_P_ID = H_record[i].P_ID;
+            change_quantity = new_quantity - H_record[i].quantity;
+            H_record[i].quantity = new_quantity;
+            H_record[i].total_price = new_quantity * H_record[i].price;
+            break;
+        }
+    }
+    if(found == 0){
+        cout << "Order ID not found" << endl;
+        return;
+    }
+    ofstream writefile("purchase_record.txt");
+    if(!writefile){
+        cout << "Unable to open file for writing" << endl;
+        return;
+    }
+    for(int i = 0; i < count; i++){
+        writefile << H_record[i].O_ID << " " << H_record[i].U_ID << " " << H_record[i].P_ID << " " 
+                  << H_record[i].model << " " << H_record[i].price << " " << H_record[i].quantity << " " 
+                  << H_record[i].total_price << " " << H_record[i].status << endl;
+    }
+    writefile.close();
+    H.updateHandphoneLinkedList(selected_P_ID, change_quantity);
+    cout << "Order updated successfully!" << endl;
+}
+
+void editLaptopCart(login_system &user){
+	Laptop L;
+    purchaseRecord L_record[1000];
+    int count = 0;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
+    double price, total_price;
+    int quantity, new_quantity, change_quantity;
+    int found = 0;
+    string selected_P_ID;
+    cur_U_ID = user.getUserID();
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        L_record[count].O_ID = O_ID;
+        L_record[count].U_ID = U_ID;
+        L_record[count].P_ID = P_ID;
+        L_record[count].model = model;
+        L_record[count].price = price;
+        L_record[count].quantity = quantity;
+        L_record[count].total_price = total_price;
+        L_record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    cout << "Your pending laptop orders:" << endl;
+    for(int i = 0; i < count; i++){
+        if(L_record[i].U_ID == cur_U_ID && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
+            cout << "Order ID: " << L_record[i].O_ID << " Product ID: " << L_record[i].P_ID 
+                 << " Model: " << L_record[i].model << " Price: " << L_record[i].price 
+                 << " Quantity Purchase: " << L_record[i].quantity 
+                 << " Total Price: " << L_record[i].total_price << endl;
+        }
+    }
+    cin.ignore();
+    cout << "Enter the Order ID you want to edit: ";
+    getline(cin, order_id);
+    cout << "Enter the new quantity: ";
+    cin >> new_quantity;
+    while(new_quantity < 1){
+        cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
+        coutr<<"If you want to cancel order, please go thought another function."<<endl;
+        cout << "Enter the new quantity: ";
+        cin >> new_quantity;
+    }
+    for(int i = 0; i < count; i++){
+        if(L_record[i].O_ID == order_id && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
+            found = 1;
+            selected_P_ID = L_record[i].P_ID;
+            change_quantity = new_quantity - L_record[i].quantity;
+            L_record[i].quantity = new_quantity;
+            L_record[i].total_price = new_quantity * L_record[i].price;
+            break;
+        }
+    }
+    if(found == 0){
+        cout << "Order ID not found" << endl;
+        return;
+    }
+    ofstream writefile("purchase_record.txt");
+    if(!writefile){
+        cout << "Unable to open file for writing" << endl;
+        return;
+    }
+    for(int i = 0; i < count; i++){
+        writefile << L_record[i].O_ID << " " << L_record[i].U_ID << " " << L_record[i].P_ID << " " 
+                  << L_record[i].model << " " << L_record[i].price << " " << L_record[i].quantity << " " 
+                  << L_record[i].total_price << " " << L_record[i].status << endl;
+    }
+    writefile.close();
+    L.updateLaptopLinkedList(selected_P_ID, change_quantity);
+    cout << "Order updated successfully!" << endl;
+}
+
+void viewCart(login_system &user){
+	ifstream readfile("purchase_record.txt");
+	string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
+	double price, total_price;
+	int quantity, new_quantity;
+	int found = 0;
+	cur_U_ID = user.getUserID();
+	if(!readfile){
+	cout << "Unable to open file Handphone.txt"<<endl;
+	exit(0);
+	}
+	while (readfile >>O_ID>>U_ID>>P_ID>>model>>price>>quantity>>total_price>>status){
+		if(U_ID == cur_U_ID && status == "pending" && containH(P_ID)){
+			cout <<"Order ID: "<<O_ID<<" Product ID: "<<P_ID<<" Model: "<<model<<" Price: "<<price<<" Quantity Purchase: "<<quantity<<" Total Price: "<<total_price<<endl;
+		}
+	}
+}
+
 bool checkEmpty(string input){
 	for (int i = 0; i < input.length(); i++) {
     if (input[i] == ' ') {
+        return true;
+    }
+	}
+	return false;
+}
+
+bool containH(string input){
+	for (int i = 0; i < input.length(); i++) {
+    if (input[i] == 'H') {
+        return true;
+    }
+	}
+	return false;
+}
+
+bool containL(string input){
+	for (int i = 0; i < input.length(); i++) {
+    if (input[i] == 'L') {
         return true;
     }
 	}
