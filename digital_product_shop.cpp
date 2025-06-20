@@ -9,6 +9,8 @@ const int TABLE_SIZE = 101;
 bool checkEmpty(string input);
 bool containH(string input);
 bool containL(string input);
+void makepayment(string userID);
+void salesSummaryReport();
 struct purchaseRecord {
     string O_ID;
     string U_ID;
@@ -181,6 +183,8 @@ class login_system{
 	friend void editHandphoneCart(login_system &user);
 	friend void editLaptopCart(login_system &user);
 	friend void viewCart(login_system &user);
+	friend void deleteHandphoneCart(login_system &user);
+	friend void deleteLaptopCart(login_system &user);
 };
 class HashTable {
 public:
@@ -1344,7 +1348,7 @@ class User : public login_system{
 	            cout << "     User Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
 	            cout << "1. Buy Laptop\n2. Buy Handphone\n3. Edit Laptop Record\n4. Edit Handphone Record\n5. Display Product Available\n6. View Cart";
-				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Display consumption record\n-1. Back to previous" << endl;
+				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Cancel Laptop Order\n12.Cancel Handphone Order\n13.Make Payment\n14.Display consumption record\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            cin >> choice;
 	            switch (choice) {
@@ -1392,10 +1396,13 @@ class User : public login_system{
 	                    break;
 	                }
 	                case 11:
-	                	
+	                	deleteLaptopCart(*this);
 	                	break;
 	                case 12:
-	                	
+	                	deleteHandphoneCart(*this);
+	                	break;
+                	case 13:
+	                	makepayment(getUserID());
 	                	break;
 	                case -1:
 	                    return 0;  
@@ -1441,7 +1448,7 @@ class Admin : public login_system{
 	            cout << "-----------------------------" << endl;
 	            cout << "     Admin Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
-	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n-1. Back to previous" << endl;
+	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Sales Suummary Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            cin >> choice;
 	            switch (choice) {
@@ -1490,6 +1497,9 @@ class Admin : public login_system{
 	                	break;
 	                case 12:
 	                	handphone.deleteproduct();
+	                	break;
+	                case 13:
+	                	salesSummaryReport();
 	                	break;
 	                case -1:
 	                    return 0;  
@@ -1570,7 +1580,7 @@ void editHandphoneCart(login_system &user){
     cin >> new_quantity;
     while(new_quantity < 1){
         cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
-        coutr<<"If you want to cancel order, please go thought another function."<<endl;
+        cout<<"If you want to cancel order, please go thought another function."<<endl;
         cout << "Enter the new quantity: ";
         cin >> new_quantity;
     }
@@ -1646,7 +1656,7 @@ void editLaptopCart(login_system &user){
     cin >> new_quantity;
     while(new_quantity < 1){
         cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
-        coutr<<"If you want to cancel order, please go thought another function."<<endl;
+        cout<<"If you want to cancel order, please go thought another function."<<endl;
         cout << "Enter the new quantity: ";
         cin >> new_quantity;
     }
@@ -1683,7 +1693,7 @@ void viewCart(login_system &user){
 	ifstream readfile("purchase_record.txt");
 	string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
 	double price, total_price;
-	int quantity, new_quantity;
+	int quantity;
 	int found = 0;
 	cur_U_ID = user.getUserID();
 	if(!readfile){
@@ -1691,10 +1701,292 @@ void viewCart(login_system &user){
 	exit(0);
 	}
 	while (readfile >>O_ID>>U_ID>>P_ID>>model>>price>>quantity>>total_price>>status){
-		if(U_ID == cur_U_ID && status == "pending" && containH(P_ID)){
+		if(U_ID == cur_U_ID && status == "pending"){
 			cout <<"Order ID: "<<O_ID<<" Product ID: "<<P_ID<<" Model: "<<model<<" Price: "<<price<<" Quantity Purchase: "<<quantity<<" Total Price: "<<total_price<<endl;
 		}
 	}
+	readfile.close();
+}
+
+void deleteHandphoneCart(login_system &user){
+	Handphone H;
+    purchaseRecord H_record[1000];
+    int count = 0;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
+    double price, total_price;
+    int quantity, new_quantity, change_quantity;
+    int found = 0;
+    string selected_P_ID, selected_O_ID;
+    cur_U_ID = user.getUserID();
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        H_record[count].O_ID = O_ID;
+        H_record[count].U_ID = U_ID;
+        H_record[count].P_ID = P_ID;
+        H_record[count].model = model;
+        H_record[count].price = price;
+        H_record[count].quantity = quantity;
+        H_record[count].total_price = total_price;
+        H_record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    cout << "Your pending handphone orders:" << endl;
+    for(int i = 0; i < count; i++){
+        if(H_record[i].U_ID == cur_U_ID && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
+            cout << "Order ID: " << H_record[i].O_ID << " Product ID: " << H_record[i].P_ID 
+                 << " Model: " << H_record[i].model << " Price: " << H_record[i].price 
+                 << " Quantity Purchase: " << H_record[i].quantity 
+                 << " Total Price: " << H_record[i].total_price << endl;
+        }
+    }
+    cin.ignore();
+    cout << "Enter the Order ID you want to delete: ";
+    getline(cin, order_id);
+
+    for(int i = 0; i < count; i++){
+        if(H_record[i].O_ID == order_id && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
+            found = 1;
+            selected_O_ID = H_record[i].O_ID;
+            selected_P_ID = H_record[i].P_ID;
+            change_quantity = -H_record[i].quantity;
+            break;
+        }
+    }
+    if(found == 0){
+        cout << "Order ID not found" << endl;
+        return;
+    }
+    ofstream writefile("purchase_record.txt");
+    if(!writefile){
+        cout << "Unable to open file for writing" << endl;
+        return;
+    }
+    for(int i = 0; i < count; i++){
+    	if(H_record[i].O_ID != selected_O_ID){
+    		writefile << H_record[i].O_ID << " " << H_record[i].U_ID << " " << H_record[i].P_ID << " " 
+                  << H_record[i].model << " " << H_record[i].price << " " << H_record[i].quantity << " " 
+                  << H_record[i].total_price << " " << H_record[i].status << endl;
+		}else{
+			continue;
+		}
+    }
+    writefile.close();
+    H.updateHandphoneLinkedList(selected_P_ID, change_quantity);
+    cout << "Order updated successfully!" << endl;
+}
+
+void deleteLaptopCart(login_system &user){
+	Laptop L;
+    purchaseRecord L_record[1000];
+    int count = 0;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
+    double price, total_price;
+    int quantity, new_quantity, change_quantity;
+    int found = 0;
+    string selected_P_ID, selected_O_ID;
+    cur_U_ID = user.getUserID();
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        L_record[count].O_ID = O_ID;
+        L_record[count].U_ID = U_ID;
+        L_record[count].P_ID = P_ID;
+        L_record[count].model = model;
+        L_record[count].price = price;
+        L_record[count].quantity = quantity;
+        L_record[count].total_price = total_price;
+        L_record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    cout << "Your pending laptop orders:" << endl;
+    for(int i = 0; i < count; i++){
+        if(L_record[i].U_ID == cur_U_ID && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
+            cout << "Order ID: " << L_record[i].O_ID << " Product ID: " << L_record[i].P_ID 
+                 << " Model: " << L_record[i].model << " Price: " << L_record[i].price 
+                 << " Quantity Purchase: " << L_record[i].quantity 
+                 << " Total Price: " << L_record[i].total_price << endl;
+        }
+    }
+    cin.ignore();
+    cout << "Enter the Order ID you want to delete: ";
+    getline(cin, order_id);
+
+    for(int i = 0; i < count; i++){
+        if(L_record[i].O_ID == order_id && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
+            found = 1;
+            selected_O_ID = L_record[i].O_ID;
+            selected_P_ID = L_record[i].P_ID;
+            change_quantity = -L_record[i].quantity;
+            break;
+        }
+    }
+    if(found == 0){
+        cout << "Order ID not found" << endl;
+        return;
+    }
+    ofstream writefile("purchase_record.txt");
+    if(!writefile){
+        cout << "Unable to open file for writing" << endl;
+        return;
+    }
+    for(int i = 0; i < count; i++){
+    	if(L_record[i].O_ID != selected_O_ID){
+    		writefile << L_record[i].O_ID << " " << L_record[i].U_ID << " " << L_record[i].P_ID << " " 
+                  << L_record[i].model << " " << L_record[i].price << " " << L_record[i].quantity << " " 
+                  << L_record[i].total_price << " " << L_record[i].status << endl;
+		}else{
+			continue;
+		}
+    }
+    writefile.close();
+    L.updateLaptopLinkedList(selected_P_ID, change_quantity);
+    cout << "Order updated successfully!" << endl;
+}
+
+void makepayment(string userID){
+    purchaseRecord record[1000];
+    int count = 0;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, order_id;
+    double price, total_price, confirmed_total_price;
+    int quantity, new_quantity;
+    int found = 0, price_not_match=0;
+    string selected_P_ID;
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        record[count].O_ID = O_ID;
+        record[count].U_ID = U_ID;
+        record[count].P_ID = P_ID;
+        record[count].model = model;
+        record[count].price = price;
+        record[count].quantity = quantity;
+        record[count].total_price = total_price;
+        record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    cout << "Your pending orders:" << endl;
+    for(int i = 0; i < count; i++){
+        if(record[i].U_ID == userID && record[i].status == "pending"){
+            cout << "Order ID: " << record[i].O_ID << " Product ID: " << record[i].P_ID 
+                 << " Model: " << record[i].model << " Price: " << record[i].price 
+                 << " Quantity Purchase: " << record[i].quantity 
+                 << " Total Price: " << record[i].total_price << endl;
+        }
+    }
+    cin.ignore();
+    cout << "Enter the Order ID you want to pay: ";
+    getline(cin, order_id);
+    cout << "Enter the total price to confirm: ";
+    cin >> confirmed_total_price;
+    while(confirmed_total_price < 0){
+        cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
+        cout << "Enter the total price to confirm: ";
+        cin >> confirmed_total_price;
+    }
+	ofstream writefile("purchase_record.txt");
+    if(!writefile){
+        cout << "Unable to open file for writing" << endl;
+        return;
+    }
+    for(int i = 0; i < count; i++){
+        if(record[i].O_ID == order_id && record[i].status == "pending" ){
+            found = 1;
+            if(record[i].total_price == confirmed_total_price){
+    		writefile << record[i].O_ID << " " << record[i].U_ID << " " << record[i].P_ID << " " 
+                  << record[i].model << " " << record[i].price << " " << record[i].quantity << " " 
+                  << record[i].total_price << " paid"<< endl;
+			}else{
+			writefile << record[i].O_ID << " " << record[i].U_ID << " " << record[i].P_ID << " " 
+              << record[i].model << " " << record[i].price << " " << record[i].quantity << " " 
+              << record[i].total_price << " "<< record[i].status << endl;
+			price_not_match = 1;
+			}
+			
+        }else{
+        	writefile << record[i].O_ID << " " << record[i].U_ID << " " << record[i].P_ID << " " 
+                  << record[i].model << " " << record[i].price << " " << record[i].quantity << " " 
+                  << record[i].total_price << " "<< record[i].status << endl;
+		}
+    }
+    
+    if(price_not_match==1){
+    	cout<<"Total price not match.Please Try Again."<<endl;
+    	return;
+	}
+    
+    if(found == 0){
+        cout << "Order ID not found" << endl;
+        return;
+    }
+    writefile.close();
+    cout << "Order updated successfully!" << endl;
+}
+
+void salesSummaryReport(){
+	purchaseRecord record[1000];
+    int count = 0, pending_order = 0, paid_order=0, total_amount_sales=0,total_amount_paid_sales=0;
+    string line;
+    ifstream readfile("purchase_record.txt");
+    string O_ID, U_ID, P_ID, model, status, order_id;
+    double price, total_price;
+    int quantity;
+    int found = 0, price_not_match=0;
+    string selected_P_ID;
+    if(!readfile){
+        cout << "Unable to open file purchase_record.txt" << endl;
+        exit(0);
+    }
+    while (readfile >> O_ID >> U_ID >> P_ID >> model >> price >> quantity >> total_price >> status){
+        record[count].O_ID = O_ID;
+        record[count].U_ID = U_ID;
+        record[count].P_ID = P_ID;
+        record[count].model = model;
+        record[count].price = price;
+        record[count].quantity = quantity;
+        record[count].total_price = total_price;
+        record[count].status = status;
+        count++;
+    }
+    readfile.close();
+    for(int i = 0; i < count; i++){
+    	total_amount_sales += record[i].total_price;
+        if(record[i].status == "pending"){
+			pending_order++;
+        }else{
+        	total_amount_paid_sales += record[i].total_price;
+        	paid_order++;
+		}
+    }
+    ofstream openfile("summary_sales_report.txt");
+    openfile <<"===   SUMMARY REPORT   === "
+    		 <<"\nTotal Records        :" << count
+    		 <<"\nPending Bookings     :" << pending_order
+    		 <<"\nPaid Bookings        :" << paid_order << fixed << setprecision(2)
+    		 <<"\nTotal Amount Sales   : RM" << total_amount_sales
+    		 <<"\nTotal Amount Received: RM" << total_amount_paid_sales <<endl;
+    openfile.close();
+    ifstream readfile1("summary_sales_report.txt");
+    if (readfile1.is_open()) {
+        while (getline(readfile1, line)) {
+            cout << line << endl;
+        }
+        readfile1.close();
+    } else {
+        cout << "Failed to open the file." << endl;
+    }
 }
 
 bool checkEmpty(string input){

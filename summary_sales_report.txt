@@ -1,0 +1,6 @@
+===   SUMMARY REPORT   === 
+Total Records        :1
+Pending Bookings     :0
+Paid Bookings        :1
+Total Amount Sales   : RM4998
+Total Amount Received: RM4998
