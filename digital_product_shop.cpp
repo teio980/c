@@ -53,7 +53,6 @@ class error {
 			cout << "[Main Menu Error] " << e.what() << endl; 
 		}
 };
-
 class login_system{
 	private:
 		Person P;
@@ -72,7 +71,6 @@ class login_system{
 		}
 		int check_username(){
 			ifstream readfile(P.filename);
-		
 			if(!readfile){
 				cout << "Unable to open file "<<P.filename<<endl;
 	        	exit(0);
@@ -305,7 +303,6 @@ public:
         }
     }
 };
-//selectionsort
 class SelectionSort {
 private:
     string *model;
@@ -330,7 +327,6 @@ public:
             QTY[i] = q[i];
         }
     }
-
     ~SelectionSort() {
         delete[] model;
         delete[] brand;
@@ -338,7 +334,6 @@ public:
         delete[] RAM;
         delete[] QTY;
     }
-    
     void sort(int arr[], int n) {
         int i, j, min_idx;
         for (i = 0; i < n - 1; i++) {
@@ -349,13 +344,11 @@ public:
             swap(arr[min_idx], arr[i]);
         }
     }
-
     void printArray(int arr[], int size) {
         for (int i = 0; i < size; i++)
             cout << arr[i] << " ";
         cout << endl;
     }
-    
 	void sortWithRecord() {
 	        int i, j, min_idx;
 	        for (i = 0; i < n - 1; i++) {
@@ -370,11 +363,8 @@ public:
 	            swap(QTY[min_idx], QTY[i]);
 	        }
 	    }
-    
     friend void printFull(const SelectionSort &s);
     friend void printterbalik(const SelectionSort &s);
-
-
     void swap(int &xp, int &yp) {
         int temp = xp;
         xp = yp;
@@ -391,29 +381,26 @@ public:
         yp = temp;
     }
 };
-
 void printFull(const SelectionSort &s) {
     for (int i = 0; i < s.n; i++) {
         cout << "Model : " << s.model[i]
              << " Brand : " << s.brand[i]
              << fixed << setprecision(2)
-             << " Price : RM" << s.price[i]
+             << " Price : RM" <<fixed<<setprecision(2)<< s.price[i]
              << " RAM : " << s.RAM[i]
              << " Quantity : " << s.QTY[i] << endl;
     }
 }
-
 void printterbalik(const SelectionSort &s) {
     for (int i = s.n - 1; i >= 0; i--) {
         cout << "Model : " << s.model[i]
              << " Brand : " << s.brand[i]
              << fixed << setprecision(2)
-             << " Price : RM" << s.price[i]
+             << " Price : RM" <<fixed<<setprecision(2)<< s.price[i]
              << " RAM : " << s.RAM[i]
              << " Quantity : " << s.QTY[i] << endl;
     }
 }
-//inserttionsort
 class InsertSort {
 public:
     void insertionSort(int arr[], int n) {
@@ -428,21 +415,17 @@ public:
             arr[j + 1] = key;
         }
     }
-
     void insertionsortall(double price[], string model[], string brand[], int RAM[], int QTY[], int n) {
         int i,  j, keyRAM, keyQTY;
         double keyPrice;
         string keyModel, keyBrand;
-
         for (i = 1; i < n; i++) {
             keyPrice = price[i];
             keyModel = model[i];
             keyBrand = brand[i];
             keyRAM = RAM[i];
             keyQTY = QTY[i];
-
             j = i - 1;
-
             while (j >= 0 && price[j] > keyPrice) {
                 price[j + 1] = price[j];
                 model[j + 1] = model[j];
@@ -458,14 +441,12 @@ public:
             QTY[j + 1] = keyQTY;
         }
     }
-
     void printArray(int arr[], int n) {
         for (int i = 0; i < n; i++){
             cout << arr[i] << " ";
         }
         cout << endl;
     }
-
     void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
         for (int i = 0; i < n; i++){
             cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" << price[i] 
@@ -478,9 +459,7 @@ public:
 			<< " RAM : " << RAM[i] << " Quantity : " << QTY[i] << endl;
 		}
 	}
-
 };
-
 class Product{
 	public:
 	struct Item {
@@ -537,6 +516,11 @@ class Laptop  : public Product{
 		    do{
 		    cout << "How many laptop do you want to add? ";
 		    cin >> size;
+            while(cin.fail()){
+                cout<<"Please enter a Integer."<<endl;
+                cout << "How many laptop do you want to add? ";
+		        cin >> size;
+            }
 		    if (size <= 0) {
 		        cout << "Invalid number of laptop!\n";
 		        return;
@@ -576,12 +560,42 @@ class Laptop  : public Product{
 				    cout<<"Enter Brand: ";
 				    getline(cin, newItem->brand);
 				}
-		        cout << "Enter Price: ";
-		        cin >> newItem->price;
-		        cout << "Enter RAM (GB): ";
-		        cin >> newItem->RAM;
-		        cout << "Enter Quantity: ";
-		        cin >> newItem->quantity;
+                do{
+                    cout << "Enter Price: ";
+                    cin >> newItem->price;
+                    while(cin.fail()){
+                        cout<<"Please enter a valid number."<<endl;
+                        cout << "Enter Price: ";
+                        cin >> newItem->price;
+                    }
+                    if (newItem->price <= 0) {
+                        cout << "Invalid number of price!\n";
+                    }
+                }while(newItem->price<=0);
+                do{
+                    cout << "Enter RAM (GB): ";
+                    cin >> newItem->RAM;
+                    while(cin.fail()){
+                        cout<<"Please enter a integer."<<endl;
+                        cout << "Enter RAM (GB): ";
+                        cin >> newItem->RAM;
+                    }
+                    if (newItem->RAM <= 0) {
+                        cout << "Invalid number of RAM!Please Enter a interger.\n";
+                    }
+                }while(newItem->RAM<=0);
+		        do{
+                    cout << "Enter Quantity: ";
+                    cin >> newItem->quantity;
+                    while(cin.fail()){
+                        cout<<"Please enter a integer."<<endl;
+                        cout << "Enter Quantity: ";
+                        cin >> newItem->quantity;
+                    }
+                    if (newItem->quantity <= 0) {
+                        cout << "Invalid number of Quantity!Please Enter a interger.\n";
+                    }
+                }while(newItem->quantity<=0);
 		        newItem->next = nullptr;
 		        if (head == nullptr) {
 		            head = newItem;
@@ -614,7 +628,8 @@ class Laptop  : public Product{
 			temp = head;
 		    cout << "\nLaptop List:\n";
 		    while (temp != nullptr) {
-		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " <<fixed<<setprecision(2)
+				<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		}
@@ -623,47 +638,75 @@ class Laptop  : public Product{
 			temp = head;
 		    cout << "\nLaptop List:\n";
 		    while (temp != nullptr) {
-		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
+		        cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand<< "\tPrice: " <<fixed<<setprecision(2)
+				<< temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
 		        temp = temp->next;
 		    }
 		    cout<<"Enter the Product ID you want to change :";
 		    cin>>product_id;
+            if(cin.fail()){
+                cout<<"Invalid Value of Product ID.Please Try Again"<<endl;
+                return;
+            }
 			temp = head;
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
 		            cout << "Enter New Laptop Model: ";
 		            cin.ignore();
 		            getline(cin, temp->model);
-		            
 		            cout << "Enter New Brand: ";
 		            getline(cin, temp->brand);
-		            
-		            cout << "Enter New Price: ";
-		            cin >> temp->price;
-		            
-		            cout << "Enter New RAM (GB): ";
-		            cin >> temp->RAM;
-		            
-		            cout << "Enter New Quantity : ";
-		            cin >> temp->quantity;
+                    do{
+                    cout << "Enter Price: ";
+                    cin >> newItem->price;
+                    while(cin.fail()){
+                        cout<<"Please enter a valid number."<<endl;
+                        cout << "Enter Price: ";
+                        cin >> newItem->price;
+                    }
+                    if (newItem->price <= 0) {
+                        cout << "Invalid number of price!\n";
+                    }
+                    }while(newItem->price<=0);
+                    do{
+                        cout << "Enter RAM (GB): ";
+                        cin >> newItem->RAM;
+                        while(cin.fail()){
+                            cout<<"Please enter a integer."<<endl;
+                            cout << "Enter RAM (GB): ";
+                            cin >> newItem->RAM;
+                        }
+                        if (newItem->RAM <= 0) {
+                            cout << "Invalid number of RAM!Please Enter a interger.\n";
+                        }
+                    }while(newItem->RAM<=0);
+                    do{
+                        cout << "Enter Quantity: ";
+                        cin >> newItem->quantity;
+                        while(cin.fail()){
+                            cout<<"Please enter a integer."<<endl;
+                            cout << "Enter Quantity: ";
+                            cin >> newItem->quantity;
+                        }
+                        if (newItem->quantity <= 0) {
+                            cout << "Invalid number of Quantity!Please Enter a interger.\n";
+                        }
+                    }while(newItem->quantity<=0);
 		            break;
 		        }
 		        temp = temp->next;
 		    }
-		    
 		    ofstream outFile("Laptop.txt"); 
 		    if (!outFile) {
-		        cerr << "Error opening file for writing!" << endl;
+		        cout << "Error opening file for writing!" << endl;
 		        return;
 		    }
-		    
 		    temp = head;
 		    while (temp != nullptr) {
 		        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
 		                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
 		        temp = temp->next;
 		    }
-		    
 		    outFile.close();
 		    cout << "Product updated successfully!" << endl;
 		    return;
@@ -671,7 +714,6 @@ class Laptop  : public Product{
 		void searchLaptop() {
 		    HashTable priceTable;
 		    HashTable modelTable;
-		
 		    ifstream readfile2("Laptop.txt");
 		    while (readfile2 >> Cache.P_ID >>Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		        priceTable.hash(Cache.price);
@@ -681,11 +723,19 @@ class Laptop  : public Product{
 		    cout << "Search by:\n1. Price\n2. Model\nChoose (1/2): ";
 		    int option;
 		    cin >> option;
+            while(cin.fail()){
+                cout << "Search by:\n1. Price\n2. Model\nChoose (1/2): ";
+                cin >> option;
+            }
 		    if (option == 1) {
-		        int searchPrice;
+		        double searchPrice;
 		        cout << "Enter price to search: ";
 		        cin >> searchPrice;
-		
+                if(cin.fail()){
+                    cout<<"Enter a valid value"<<endl;
+                    cout << "Enter price to search: ";
+		            cin >> searchPrice;
+                }
 		        if (priceTable.exists(searchPrice)) {
 		            cout << "Price found! Matching laptops:" << endl;
 		
@@ -697,10 +747,12 @@ class Laptop  : public Product{
 		                }
 		            }
 		            readfile3.close();
-		        } else {
+		        } 
+				else {
 		            cout << "Price not found." << endl;
 		        }
-		    } else if (option == 2) {
+		    } 
+			else if (option == 2) {
 		        string searchModel;
 		        cout << "Enter model to search: ";
 		        cin >> searchModel;
@@ -714,10 +766,12 @@ class Laptop  : public Product{
 		                }
 		            }
 		            readfile4.close();
-		        } else {
+		        } 
+				else {
 		            cout << "Model not found." << endl;
 		        }
-		    } else {
+		    } 
+			else {
 		        cout << "Invalid option." << endl;
 		    }
 			system("pause");
@@ -727,78 +781,77 @@ class Laptop  : public Product{
 		    double price[TABLE_SIZE];
 			int RAM[TABLE_SIZE], QTY[TABLE_SIZE];
 		    int count = 0;
-		
 		    ifstream readfile2("Laptop.txt");
-		
 		    while (readfile2 >> pid[count] >> model[count] >> brand[count] >> price[count] >> RAM[count]>>QTY[count]) {
 		        count++;
 		    }
-		
 		    for (int i = 0; i < count; i++){
 		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] << " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] <<" Quantity : "<<QTY[i]<<endl;
 		    }
-		
 		    int choice;
 		    cout << "\nChoose sort from:\n";
 		    cout << "1. Low to High\n";
 		    cout << "2. High to Low\n";
 		    cout << "Enter choice (1 or 2): ";
 		    cin >> choice;
-		
+            while(cin.fail()){
+                cout<<"Please enter a Integer."<<endl;
+                cout << "Enter choice (1 or 2): ";
+		        cin >> choice;
+            }
 		   SelectionSort s(model, brand, price, RAM, QTY, count); 
 		   s.sortWithRecord();
-
 			if (choice == 1) {
 			    cout << "Sorted laptop data (Low to High):\n";
 			    printFull(s); 
-			} else if (choice == 2) {
+			} 
+			else if (choice == 2) {
 			    cout << "Sorted laptop data (High to Low):\n";
 			    printterbalik(s);
-			} else {
+			} 
+			else {
 			    cout << "Invalid choice!" << endl;
 			}
-			
 			system("pause");
-
 		}
 		void deleteproduct() override {
 		    string product_id;
 		    temp = head;
-		
 		    cout << "\nLaptop List:\n";
 		    while (temp != nullptr) {
 		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
 		             << "\tPrice: " <<fixed<<setprecision(2)<< temp->price << "\tRAM: " << temp->RAM << "GB" << endl;
 		        temp = temp->next;
 		    }
-		
 		    cout << "Enter the Product ID you want to delete: ";
 		    cin >> product_id;
-		
+            while(cin.fail()){
+                cout<<"Invalid Value of Product ID."<<endl;
+                cout << "Enter the Product ID you want to delete: ";
+		        cin >> product_id;
+            }
 		    temp = head;
 		    Item* prev = nullptr;   
-		
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
 		            if (prev == nullptr) {
 		                head = temp->next;
-		            } else {
+		            } 
+					else {
 		                prev->next = temp->next;
 		            }
 		            delete temp;
 		            ofstream outFile("Laptop.txt"); 
 				    if (!outFile) {
-				        cerr << "Error opening file for writing!" << endl;
+				        cout << "Error opening file for writing!" << endl;
 				        return;
 				    }
-				    
 				    temp = head;
 				    while (temp != nullptr) {
 				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
 				                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
 				        temp = temp->next;
 				    }
-				    
 				    outFile.close();
 		            cout << "Laptop deleted successfully!\n";
 		            return;
@@ -806,10 +859,8 @@ class Laptop  : public Product{
 		        prev = temp;
 		        temp = temp->next;
 		    }
-		
 		    cout << "Laptop with Product ID " << product_id << " not found.\n";
 		}
-
 		void buyLaptop(string U_ID){
 			string product_id;
 			int L_ID,H_ID,O_ID;
@@ -830,7 +881,6 @@ class Laptop  : public Product{
 			cin.ignore();
 			cout<<"Enter the Product ID you want to add to cart:";
 			getline(cin,product_id);
-			
 			temp = head;
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
@@ -839,9 +889,18 @@ class Laptop  : public Product{
 		        	cout<<"-------------------------------------------------------"<<endl;
 		            cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
 					<< "\tPrice: " << fixed<<setprecision(2)<<temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
-					
-					cout<<"How many you want to buy?";
-					cin>>buy_qty;
+                    do{
+                        cout<<"How many you want to buy?";
+					    cin>>buy_qty;
+                        while(cin.fail()){
+                            cout<<"Please enter an Integer."<<endl;
+                            cout<<"How many you want to buy?";
+					        cin>>buy_qty;
+                        }
+                        if (buy_qty <= 0) {
+                            cout<<"Invalid buy quantity. Please Try Again."<<endl;
+                        }
+                    }while(buy_qty<=0);
 					while(buy_qty>temp->quantity){
 						cout<<"Invalid buy quantity. Please Try Again."<<endl;
 						cout<<"How many you want to buy?";
@@ -849,7 +908,7 @@ class Laptop  : public Product{
 					}
 					total_price = buy_qty * temp->price;
 					if (!openfile) {
-				        cerr << "Error opening file  purchase_record.txt for writing!" << endl;
+				        cout << "Error opening file  purchase_record.txt for writing!" << endl;
 				        return;
 				    }
 					openfile << order_id << " " << U_ID << " " <<  temp->P_ID << " " << temp->model << " " << temp->price << " " << buy_qty << " " << total_price << " pending" << endl;
@@ -863,13 +922,11 @@ class Laptop  : public Product{
 				    openfile << L_ID <<" "<< H_ID << " "<< (O_ID+1);
 				    openfile.close();
 					temp->quantity = temp->quantity - buy_qty;
-					
 					ofstream outFile("Laptop.txt"); 
 				    if (!outFile) {
-				        cerr << "Error opening file for writing!" << endl;
+				        cout << "Error opening file for writing!" << endl;
 				        return;
 				    }
-				    
 				    temp = head;
 				    while (temp != nullptr) {
 				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
@@ -877,12 +934,10 @@ class Laptop  : public Product{
 				        temp = temp->next;
 				    }
 				    outFile.close();
-					
 		            break;
 		        }
 		        temp = temp->next;
 		    }
-		    
 		    if(found == 0){
 		    	cout<<"Invalid Product ID. Please Try Again."<<endl;
 			}
@@ -904,17 +959,15 @@ class Laptop  : public Product{
 		        }
 		        temp = temp->next;
 		    }
-		
 		    if (found==0) {
 		        cout << "Product ID " << selected_P_ID << " not found in the linked list!" << endl;
 		        return;
 		    }
 		    ofstream openfile("Laptop.txt");
 		    if (!openfile) {
-		        cerr << "Error opening Laptop.txt for writing!" << endl;
+		        cout << "Error opening Laptop.txt for writing!" << endl;
 		        return;
 		    }
-		
 		    temp = head;
 		    while (temp != nullptr) {
 		        openfile << temp->P_ID << " " 
@@ -925,7 +978,6 @@ class Laptop  : public Product{
 		                << temp->quantity << endl;
 		        temp = temp->next;
 		    }
-		
 		    openfile.close();
 		    cout<<"Laptop data updated"<<endl;
 		}
@@ -940,7 +992,6 @@ class Handphone : public Product{
     		temp = nullptr;
     		int count = 0;
     		ifstream readfile("Handphone.txt");
-		    
 		    if(!readfile){
 			cout << "Unable to open file Handphone.txt"<<endl;
         	exit(0);
@@ -956,7 +1007,8 @@ class Handphone : public Product{
 		        newItem->next = nullptr;
 		        if (head == nullptr) {
 		            head = newItem;
-		        } else {
+		        } 
+				else {
 		            temp = head;
 		            while (temp->next != nullptr) {
 		                temp = temp->next;
@@ -971,6 +1023,11 @@ class Handphone : public Product{
 		    do{
 		    cout << "How many phones do you want to add? ";
 		    cin >> size;
+            while(cin.fail()){
+                cout<<"Invalid Value. Please enter an Interger"<<endl;
+                cout<<"How many phones do you want to add?";
+                cin>>size;
+            }
 		    if (size <= 0) {
 		        cout << "Invalid number of phones!\n";
 		        return;
@@ -1010,16 +1067,47 @@ class Handphone : public Product{
 				    cout<<"Enter Brand: ";
 				    getline(cin, newItem->brand);
 				}
-		        cout << "Enter Price: ";
-		        cin >> newItem->price;
-		        cout << "Enter RAM (GB): ";
-		        cin >> newItem->RAM;
-		        cout << "Enter Quantity: ";
-		        cin >> newItem->quantity;
+		        do{
+                    cout << "Enter Price: ";
+                    cin >> newItem->price;
+                    while(cin.fail()){
+                        cout<<"Please enter a valid number."<<endl;
+                        cout << "Enter Price: ";
+                        cin >> newItem->price;
+                    }
+                    if (newItem->price <= 0) {
+                        cout << "Invalid number of price!\n";
+                    }
+                }while(newItem->price<=0);
+                do{
+                    cout << "Enter RAM (GB): ";
+                    cin >> newItem->RAM;
+                    while(cin.fail()){
+                        cout<<"Please enter a integer."<<endl;
+                        cout << "Enter RAM (GB): ";
+                        cin >> newItem->RAM;
+                    }
+                    if (newItem->RAM <= 0) {
+                        cout << "Invalid number of RAM!Please Enter a interger.\n";
+                    }
+                }while(newItem->RAM<=0);
+		        do{
+                    cout << "Enter Quantity: ";
+                    cin >> newItem->quantity;
+                    while(cin.fail()){
+                        cout<<"Please enter a integer."<<endl;
+                        cout << "Enter Quantity: ";
+                        cin >> newItem->quantity;
+                    }
+                    if (newItem->quantity <= 0) {
+                        cout << "Invalid number of Quantity!Please Enter a interger.\n";
+                    }
+                }while(newItem->quantity<=0);
 		        newItem->next = nullptr;
 		        if (head == nullptr) {
 		            head = newItem;
-		        } else {
+		        } 
+				else {
 		            temp = head;
 		            while (temp->next != nullptr) {
 		                temp = temp->next;
@@ -1064,6 +1152,11 @@ class Handphone : public Product{
 		    }
 		    cout<<"Enter the Product ID you want to change :";
 		    cin>>product_id;
+            while(cin.fail()){
+             cout<<"Invalid Value of Product ID. Please Try Again"<<endl;
+             cout<<"Enter the Product ID you want to change :";
+             cin>>product_id;   
+            }
 			temp = head;
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
@@ -1084,31 +1177,58 @@ class Handphone : public Product{
 				    cout << "Enter New Brand: ";
 				    getline(cin, temp->brand);
 					}
-		            cout << "Enter New Price: ";
-		            cin >> temp->price; 
-		            cout << "Enter New RAM (GB): ";
-		            cin >> temp->RAM;
-		            cout << "Enter New Quantity : ";
-		            cin >> temp->quantity;
+		            do{
+                        cout << "Enter Price: ";
+                        cin >> newItem->price;
+                        while(cin.fail()){
+                            cout<<"Please enter a valid number."<<endl;
+                            cout << "Enter Price: ";
+                            cin >> newItem->price;
+                        }
+                        if (newItem->price <= 0) {
+                            cout << "Invalid number of price!\n";
+                        }
+                    }while(newItem->price<=0);
+                    do{
+                        cout << "Enter RAM (GB): ";
+                        cin >> newItem->RAM;
+                        while(cin.fail()){
+                            cout<<"Please enter a integer."<<endl;
+                            cout << "Enter RAM (GB): ";
+                            cin >> newItem->RAM;
+                        }
+                        if (newItem->RAM <= 0) {
+                            cout << "Invalid number of RAM!Please Enter a interger.\n";
+                        }
+                    }while(newItem->RAM<=0);
+                    do{
+                        cout << "Enter Quantity: ";
+                        cin >> newItem->quantity;
+                        while(cin.fail()){
+                            cout<<"Please enter a integer."<<endl;
+                            cout << "Enter Quantity: ";
+                            cin >> newItem->quantity;
+                        }
+                        if (newItem->quantity <= 0) {
+                            cout << "Invalid number of Quantity!Please Enter a interger.\n";
+                        }
+                    }while(newItem->quantity<=0);
 		            cout << "Handphone details updated successfully!\n";
 		            break;
 		        }
 		        temp = temp->next;
 		    }
-		    
 		    ofstream outFile("Handphone.txt"); 
 		    if (!outFile) {
-		        cerr << "Error opening file for writing!" << endl;
+		        cout << "Error opening file for writing!" << endl;
 		        return;
 		    }
-		    
 		    temp = head;
 		    while (temp != nullptr) {
 		        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
 		                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
 		        temp = temp->next;
 		    }
-		    
 		    outFile.close();
 		    cout << "Product updated successfully!" << endl;
 		    return;
@@ -1116,26 +1236,31 @@ class Handphone : public Product{
 		void searchHandphone() {
 		    HashTable priceTable;
 		    HashTable modelTable;
-		
 		    ifstream readfile2("Handphone.txt");
 		    while (readfile2 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		        priceTable.hash(Cache.price);
 		        modelTable.hash(Cache.model);
 		    }
 		    readfile2.close();
-		
 		    cout << "Search by:\n1. Price\n2. Model\nChoose (1/2): ";
 		    int option;
 		    cin >> option;
-		
+            while(cin.fail()){
+                cout<<"Invalid Value. Pleae Enter an Integer."<<endl;
+                cout>>"Search by:\n1. Price\n2. Model\nChoose (1/2): ";
+                cin>>option;
+            }
 		    if (option == 1) {
-		        int searchPrice;
+		        double searchPrice;
 		        cout << "Enter price to search: ";
 		        cin >> searchPrice;
-		
+                while(cin.fail()){
+                    cout<<"Invalid Value. Please Try Again."<<endl;
+                    cout<<"Enter price to search: ";
+                    cin>>searchPrice;
+                }
 		        if (priceTable.exists(searchPrice)) {
 		            cout << "Price found! Matching handphones:" << endl;
-		
 		            ifstream readfile3("Handphone.txt");
 		            while (readfile3 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.price == searchPrice) {
@@ -1144,18 +1269,22 @@ class Handphone : public Product{
 		                }
 		            }
 		            readfile3.close();
-		        } else {
+		        } 
+				else {
 		            cout << "Price not found." << endl;
 		        }
-		
-		    } else if (option == 2) {
+		    } 
+			else if (option == 2) {
 		        string searchModel;
 		        cout << "Enter model to search: ";
 		        cin >> searchModel;
-		
+                while(cin.fail()){
+                    cout<<"Invalid Value.Please Try Again."<<endl;
+                    cout<<"Enter model to search: ";
+                    cin>> searchModel;
+                }
 		        if (modelTable.exists(searchModel)) {
 		            cout << "Model found! Matching handphones:" << endl;
-		
 		            ifstream readfile4("Handphone.txt");
 		            while (readfile4 >> Cache.P_ID >> Cache.model >> Cache.brand >> Cache.price >> Cache.RAM >> Cache.quantity) {
 		                if (Cache.model == searchModel) {
@@ -1164,13 +1293,14 @@ class Handphone : public Product{
 		                }
 		            }
 		            readfile4.close();
-		        } else {
+		        } 
+				else {
 		            cout << "Model not found." << endl;
 		        }
-		    } else {
+		    } 
+			else {
 		        cout << "Invalid option." << endl;
 		    }
-		
 		    system("pause");
 		}
 		void sortHandphone() {
@@ -1178,42 +1308,42 @@ class Handphone : public Product{
 		    double price[TABLE_SIZE];
 			int RAM[TABLE_SIZE],QTY[TABLE_SIZE];
 		    int count = 0;
-		
 		    ifstream readfile2("Handphone.txt");
-		
 		    while (readfile2 >> pid[count]  >> model[count] >> brand[count] >> price[count] >> RAM[count] >> QTY[count]) {
 		        count++;
 		    }
-		
 		    cout << "Original handphone data:\n";
 		    for (int i = 0; i < count; i++)
 		        cout <<"Model : "<< model[i] << " Brand : " << brand[i] 
 				<< " Price : RM" <<fixed<<setprecision(2)<< price[i] << " RAM : " << RAM[i] << "Quantity" << QTY[i] <<endl;
-		
 		    int choice;
 		    cout << "Choose sort order by price from...\n";
 		    cout << "1. Low to High\n";
 		    cout << "2. High to Low\n";
 		    cout << "Enter choice (1 or 2): ";
 		    cin >> choice;
-		
+            while(cin.fail()){
+                cout<<"Invalid Value. Please Enter an Integer."<<endl;
+                cout<<"Enter choice (1 or 2): ";
+                cin>>choice;
+            }
 		    InsertSort is;
 		    is.insertionsortall(price, model, brand, RAM, QTY, count);
-		
 		    if (choice == 1) {
 		        cout << "Sorted handphone data (Low to High):\n";
 		        is.printFull(model, brand, price, RAM, QTY, count);
-		    } else if (choice == 2) {
+		    } 
+			else if (choice == 2) {
 		        cout << "Sorted handphone data (High to Low):\n";
 		        is.printterbalik(model, brand, price, RAM, QTY, count);
-		    } else {
+		    } 
+			else {
 		        cout << "Invalid choice!" << endl;
 		    }
 		}
 		void deleteproduct() override {
 		    string product_id;
 		    temp = head;
-		
 		    cout << "\nHandphone List:\n";
 		    while (temp != nullptr) {
 		        cout << "Product ID: " << temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
@@ -1222,29 +1352,33 @@ class Handphone : public Product{
 		    }
 		    cout << "Enter the Product ID you want to delete: ";
 		    cin >> product_id;
+            while(cin.fail()){
+                cout<<"Invalid Value. Please Try Again."<<endl;
+                cout << "Enter the Product ID you want to delete: ";
+		        cin >> product_id;
+            }
 		    temp = head;
 		    Item* prev = nullptr;
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
 		            if (prev == nullptr) {
 		                head = temp->next;
-		            } else {
+		            } 
+					else {
 		                prev->next = temp->next;
 		            }
 		            delete temp;
 		            ofstream outFile("Handphone.txt"); 
 				    if (!outFile) {
-				        cerr << "Error opening file for writing!" << endl;
+				        cout << "Error opening file for writing!" << endl;
 				        return;
 				    }
-				    
 				    temp = head;
 				    while (temp != nullptr) {
 				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
 				                << temp->price << " " << temp->RAM << " " << temp->quantity << endl;
 				        temp = temp->next;
 				    }
-				    
 				    outFile.close();
 		            cout << "Handphone deleted successfully!\n";
 		            return;
@@ -1252,9 +1386,7 @@ class Handphone : public Product{
 		        prev = temp;
 		        temp = temp->next;
 		    }
-		
 		    cout << "Handphone with Product ID " << product_id << " not found.\n";
-		   
 		}	
 		void buyHandphone(string U_ID){
 			string product_id;
@@ -1276,7 +1408,6 @@ class Handphone : public Product{
 			cin.ignore();
 			cout<<"Enter the Product ID you want to add to cart:";
 			getline(cin,product_id);
-			
 			temp = head;
 		    while (temp != nullptr) {
 		        if (temp->P_ID == product_id) {
@@ -1285,9 +1416,18 @@ class Handphone : public Product{
 		        	cout<<"-------------------------------------------------------"<<endl;
 		            cout <<"Product ID: "<<temp->P_ID << "\tModel: " << temp->model << "\tBrand: " << temp->brand
 					<< "\tPrice: " << temp->price << "\tRAM: " << temp->RAM << "GB"<<"\tQuantity: " << temp->quantity<<endl;
-					
-					cout<<"How many you want to buy?";
-					cin>>buy_qty;
+                    do{
+                        cout<<"How many you want to buy?";
+                        cin>>buy_qty;
+                        while(cin.fail()){
+                            cout<<"Please enter a integer."<<endl;
+                            cout<<"How many you want to buy?";
+                            cin>>buy_qty;
+                        }
+                        if (buy_qty <= 0) {
+                            cout << "Invalid number of quantity!Please Enter an Interger.\n";
+                        }
+                    }while(buy_qty<=0);
 					while(buy_qty>temp->quantity){
 						cout<<"Invalid buy quantity. Please Try Again."<<endl;
 						cout<<"How many you want to buy?";
@@ -1295,7 +1435,7 @@ class Handphone : public Product{
 					}
 					total_price = buy_qty * temp->price;
 					if (!openfile) {
-				        cerr << "Error opening file  purchase_record.txt for writing!" << endl;
+				        cout << "Error opening file  purchase_record.txt for writing!" << endl;
 				        return;
 				    }
 					openfile << order_id << " " << U_ID << " " <<  temp->P_ID << " " << temp->model << " " << temp->price << " " << buy_qty << " " << total_price << " pending" << endl;
@@ -1309,13 +1449,11 @@ class Handphone : public Product{
 				    openfile << L_ID <<" "<< H_ID << " "<< (O_ID+1);
 				    openfile.close();
 					temp->quantity = temp->quantity - buy_qty;
-					
 					ofstream outFile("Handphone.txt"); 
 				    if (!outFile) {
-				        cerr << "Error opening file for writing!" << endl;
+				        cout << "Error opening file for writing!" << endl;
 				        return;
 				    }
-				    
 				    temp = head;
 				    while (temp != nullptr) {
 				        outFile << temp->P_ID << " " << temp->model << " " << temp->brand << " "
@@ -1323,12 +1461,10 @@ class Handphone : public Product{
 				        temp = temp->next;
 				    }
 				    outFile.close();
-					
 		            break;
 		        }
 		        temp = temp->next;
 		    }
-		    
 		    if(found == 0){
 		    	cout<<"Invalid Product ID. Please Try Again."<<endl;
 			}
@@ -1350,17 +1486,15 @@ class Handphone : public Product{
 		        }
 		        temp = temp->next;
 		    }
-		
 		    if (found==0) {
 		        cout << "Product ID " << selected_P_ID << " not found in the linked list!" << endl;
 		        return;
 		    }
 		    ofstream openfile("Handphone.txt");
 		    if (!openfile) {
-		        cerr << "Error opening Handphone.txt for writing!" << endl;
+		        cout << "Error opening Handphone.txt for writing!" << endl;
 		        return;
 		    }
-		
 		    temp = head;
 		    while (temp != nullptr) {
 		        openfile << temp->P_ID << " " 
@@ -1371,7 +1505,6 @@ class Handphone : public Product{
 		                << temp->quantity << endl;
 		        temp = temp->next;
 		    }
-		
 		    openfile.close();
 		    cout<<"Handphone data updated"<<endl;
 	}
@@ -1407,7 +1540,7 @@ class User : public login_system{
 	                    case 3:
 	                        return 1;
 	                    default:
-	                        throw out_of_range("Choice must be 1–3.");
+	                        throw out_of_range("Choice must be 1 to 3.");
 	                }
 		        } catch (const exception &e) {
 		            cin.clear();
@@ -1424,13 +1557,13 @@ class User : public login_system{
 	        int back = 0;
 	        Handphone H;
 	        Laptop L;
-			
 	        while (back == 0) {
 	            cout << "-----------------------------" << endl;
 	            cout << "     User Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
 	            cout << "1. Buy Laptop\n2. Buy Handphone\n3. Edit Laptop Record\n4. Edit Handphone Record\n5. Display Product Available\n6. View Cart";
-				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Cancel Laptop Order\n12.Cancel Handphone Order\n13.Make Payment\n14.Generate Consumption Report\n15.View Consumption Report\n-1. Back to previous" << endl;
+				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Cancel Laptop Order\n12.Cancel Handphone Order";
+				cout<<"\n13.Make Payment\n14.Generate Consumption Report\n15.View Consumption Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            try {
 	                cin >> choice;
@@ -1562,7 +1695,8 @@ class Admin : public login_system{
 	            cout << "     Admin Function Menu     " << endl;
 	            cout << "-----------------------------" << endl;
 	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone";
-				cout<<"\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Generate Sales Summary Report\n14.View Sales Summary Report\n-1. Back to previous" << endl;
+				cout<<"\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone";
+				cout<<"\n13.Generate Sales Summary Report\n14.View Sales Summary Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
 	            try {
 		            cin >> choice;
@@ -1637,7 +1771,6 @@ class Admin : public login_system{
 	        return 0;
 	    }
 };
-
 int main() {
     int choice, back = 1;
     User U;
@@ -1675,8 +1808,6 @@ int main() {
     }
     return 0;
 }
-
-
 void editHandphoneCart(login_system &user){
 	Handphone H;
     purchaseRecord H_record[1000];
@@ -1716,8 +1847,18 @@ void editHandphoneCart(login_system &user){
     cin.ignore();
     cout << "Enter the Order ID you want to edit: ";
     getline(cin, order_id);
-    cout << "Enter the new quantity: ";
-    cin >> new_quantity;
+    do{
+        cout << "Enter the new quantity: ";
+        cin >> new_quantity;
+        while(cin.fail()){
+            cout<<"Please enter a integer."<<endl;
+            cout << "Enter the new quantity: ";
+            cin >> new_quantity;
+        }
+        if (new_quantity <= 0) {
+            cout << "Invalid number of quantity!Please Enter an Interger.\n";
+        }
+    }while(new_quantity<=0);
     while(new_quantity < 1){
         cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
         cout<<"If you want to cancel order, please go thought another function."<<endl;
@@ -1752,7 +1893,6 @@ void editHandphoneCart(login_system &user){
     H.updateHandphoneLinkedList(selected_P_ID, change_quantity);
     cout << "Order updated successfully!" << endl;
 }
-
 void editLaptopCart(login_system &user){
 	Laptop L;
     purchaseRecord L_record[1000];
@@ -1792,8 +1932,18 @@ void editLaptopCart(login_system &user){
     cin.ignore();
     cout << "Enter the Order ID you want to edit: ";
     getline(cin, order_id);
-    cout << "Enter the new quantity: ";
-    cin >> new_quantity;
+    do{
+        cout << "Enter the new quantity: ";
+        cin >> new_quantity;
+        while(cin.fail()){
+            cout<<"Please enter a integer."<<endl;
+            cout << "Enter the new quantity: ";
+            cin >> new_quantity;
+        }
+        if (new_quantity <= 0) {
+            cout << "Invalid number of quantity!Please Enter an Interger.\n";
+        }
+    }while(new_quantity<=0);
     while(new_quantity < 1){
         cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
         cout<<"If you want to cancel order, please go thought another function."<<endl;
@@ -1828,7 +1978,6 @@ void editLaptopCart(login_system &user){
     L.updateLaptopLinkedList(selected_P_ID, change_quantity);
     cout << "Order updated successfully!" << endl;
 }
-
 void viewCart(login_system &user){
 	ifstream readfile("purchase_record.txt");
 	string O_ID, U_ID, P_ID, model, status, cur_U_ID, order_id;
@@ -1847,7 +1996,6 @@ void viewCart(login_system &user){
 	}
 	readfile.close();
 }
-
 void deleteHandphoneCart(login_system &user){
 	Handphone H;
     purchaseRecord H_record[1000];
@@ -1887,7 +2035,6 @@ void deleteHandphoneCart(login_system &user){
     cin.ignore();
     cout << "Enter the Order ID you want to delete: ";
     getline(cin, order_id);
-
     for(int i = 0; i < count; i++){
         if(H_record[i].O_ID == order_id && H_record[i].status == "pending" && containH(H_record[i].P_ID)){
             found = 1;
@@ -1919,7 +2066,6 @@ void deleteHandphoneCart(login_system &user){
     H.updateHandphoneLinkedList(selected_P_ID, change_quantity);
     cout << "Order updated successfully!" << endl;
 }
-
 void deleteLaptopCart(login_system &user){
 	Laptop L;
     purchaseRecord L_record[1000];
@@ -1959,7 +2105,6 @@ void deleteLaptopCart(login_system &user){
     cin.ignore();
     cout << "Enter the Order ID you want to delete: ";
     getline(cin, order_id);
-
     for(int i = 0; i < count; i++){
         if(L_record[i].O_ID == order_id && L_record[i].status == "pending" && containL(L_record[i].P_ID)){
             found = 1;
@@ -1991,7 +2136,6 @@ void deleteLaptopCart(login_system &user){
     L.updateLaptopLinkedList(selected_P_ID, change_quantity);
     cout << "Order updated successfully!" << endl;
 }
-
 void makepayment(string userID){
     purchaseRecord record[1000];
     int count = 0;
@@ -2029,10 +2173,20 @@ void makepayment(string userID){
     cin.ignore();
     cout << "Enter the Order ID you want to pay: ";
     getline(cin, order_id);
-    cout << "Enter the total price to confirm: ";
-    cin >> confirmed_total_price;
+    do{
+        cout << "Enter the total price to confirm: ";
+        cin >> confirmed_total_price;
+        while(cin.fail()){
+            cout<<"Invalid Value. Please Enter Number."<<endl;
+            cout << "Enter the total price to confirm: ";
+            cin >> confirmed_total_price;
+        }
+        if (confirmed_total_price <= 0) {
+            cout << "Invalid number of total price!Please Enter number more than 0.\n";
+        }
+    }while(confirmed_total_price<=0);
     while(confirmed_total_price < 0){
-        cout << "Invalid value. Please Try Again. The quantity must be atleast 1." << endl;
+        cout << "Invalid value. Please Try Again. The price must be more than 0 ." << endl;
         cout << "Enter the total price to confirm: ";
         cin >> confirmed_total_price;
     }
@@ -2054,19 +2208,17 @@ void makepayment(string userID){
               << record[i].total_price << " "<< record[i].status << endl;
 			price_not_match = 1;
 			}
-			
-        }else{
+		}
+		else{
         	writefile << record[i].O_ID << " " << record[i].U_ID << " " << record[i].P_ID << " " 
                   << record[i].model << " " << record[i].price << " " << record[i].quantity << " " 
                   << record[i].total_price << " "<< record[i].status << endl;
 		}
     }
-    
     if(price_not_match==1){
     	cout<<"Total price not match.Please Try Again."<<endl;
     	return;
 	}
-    
     if(found == 0){
         cout << "Order ID not found" << endl;
         return;
@@ -2074,7 +2226,6 @@ void makepayment(string userID){
     writefile.close();
     cout << "Order updated successfully!" << endl;
 }
-
 void salesSummaryReport(){
 	purchaseRecord record[1000];
     int count = 0, pending_order = 0, paid_order=0, total_amount_sales=0,total_amount_paid_sales=0;
@@ -2105,7 +2256,8 @@ void salesSummaryReport(){
     	total_amount_sales += record[i].total_price;
         if(record[i].status == "pending"){
 			pending_order++;
-        }else{
+        }
+		else{
         	total_amount_paid_sales += record[i].total_price;
         	paid_order++;
 		}
@@ -2120,7 +2272,6 @@ void salesSummaryReport(){
     openfile.close();
     cout<<"Report Successful Generated."<<endl;
 }
-
 void viewsalesSummaryReport(){
 	string line;
 	ifstream readfile1("summary_sales_report.txt");
@@ -2129,11 +2280,11 @@ void viewsalesSummaryReport(){
             cout << line << endl;
         }
         readfile1.close();
-    } else {
+    } 
+	else {
         cout << "Failed to open the file." << endl;
     }
 }
-
 void consumptionReport(string userID){
 	purchaseRecord record[1000];
     int count = 0, pending_order = 0, paid_order=0,total_amount_paid_sales=0;
@@ -2180,23 +2331,21 @@ void consumptionReport(string userID){
     openfile.close();
     cout<<"Report Successful Generated."<<endl;
 }
-
 void viewconsumptionReport(string userID){
 	purchaseRecord record[1000];
     string line,filename;
     filename = "Consumption_Report_" + userID+".txt";
-
     ifstream readfile1(filename);
     if (readfile1.is_open()) {
         while (getline(readfile1, line)) {
             cout << line << endl;
         }
         readfile1.close();
-    } else {
+    } 
+	else {
         cout << "Failed to open the file." << endl;
     }
 }
-
 bool checkEmpty(string input){
 	for (int i = 0; i < input.length(); i++) {
     if (input[i] == ' ') {
@@ -2205,7 +2354,6 @@ bool checkEmpty(string input){
 	}
 	return false;
 }
-
 bool containH(string input){
 	for (int i = 0; i < input.length(); i++) {
     if (input[i] == 'H') {
@@ -2214,7 +2362,6 @@ bool containH(string input){
 	}
 	return false;
 }
-
 bool containL(string input){
 	for (int i = 0; i < input.length(); i++) {
 	    if (input[i] == 'L') {
