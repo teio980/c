@@ -1,2 +1,4 @@
 L1 TUF15 ASUS 3599 5 2
 L2 Nitro4 Acer 2499 8 11
+L3 Nitro5 Acer 99 8 11
+

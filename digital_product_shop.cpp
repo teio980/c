@@ -35,9 +35,29 @@ struct Person{
 	string f_identity;
 	string user_id;
 };
+class error {
+	public:
+	    void displayuser(const exception &e) {
+	        cout << "Please enter a number (Example:1,2,3).\n"<< e.what() << endl;
+	    }
+		void displayusermenu(const exception &e) {
+	        cout << "Please enter a number (Example:1,2,3,4,5.....).\n"<< e.what() << endl;
+	    }
+	    void displayadmin(const exception &e) {
+	        cout << "Please enter a valid number (Example:1,2,3).\n"<< e.what() << endl;
+	    }
+	    void displayadminmenu(const exception &e) {
+	        cout << "Please enter a number (Example:1,2,3,4,5.....).\n"<< e.what() << endl;
+	    }
+	    void displaymain(const exception &e) { 
+			cout << "[Main Menu Error] " << e.what() << endl; 
+		}
+};
+
 class login_system{
 	private:
 		Person P;
+		error eh;
 	protected:
 		void check_identity(){
 			if(P.identity == "user"){
@@ -287,7 +307,38 @@ public:
 };
 //selectionsort
 class SelectionSort {
+private:
+    string *model;
+    string *brand;
+    double *price;
+    int *RAM;
+    int *QTY;
+    int n;
 public:
+	SelectionSort(string m[], string b[], double p[], int r[], int q[], int size) {
+        n = size;
+        model = new string[n];
+        brand = new string[n];
+        price = new double[n];
+        RAM = new int[n];
+        QTY = new int[n];
+        for (int i = 0; i < n; i++) {
+            model[i] = m[i];
+            brand[i] = b[i];
+            price[i] = p[i];
+            RAM[i] = r[i];
+            QTY[i] = q[i];
+        }
+    }
+
+    ~SelectionSort() {
+        delete[] model;
+        delete[] brand;
+        delete[] price;
+        delete[] RAM;
+        delete[] QTY;
+    }
+    
     void sort(int arr[], int n) {
         int i, j, min_idx;
         for (i = 0; i < n - 1; i++) {
@@ -305,33 +356,25 @@ public:
         cout << endl;
     }
     
-    void sortWithRecord(double price[], string model[], string brand[], int RAM[],int QTY[], int n) {
-        int i, j, min_idx;
-        for (i = 0; i < n - 1; i++) {
-            min_idx = i;
-            for (j = i + 1; j < n; j++)
-                if (price[j] < price[min_idx])
-                    min_idx = j;
-            swap(price[min_idx], price[i]);
-            swap(model[min_idx], model[i]);
-            swap(brand[min_idx], brand[i]);
-            swap(RAM[min_idx], RAM[i]);
-        }
-    }
-
-    void printFull(string model[], string brand[], double price[], int RAM[],int QTY[], int n) {
-        for (int i = 0; i < n; i++){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<" Quantity : "<< QTY[i] << endl;
-        }
-    }
+	void sortWithRecord() {
+	        int i, j, min_idx;
+	        for (i = 0; i < n - 1; i++) {
+	            min_idx = i;
+	            for (j = i + 1; j < n; j++)
+	                if (price[j] < price[min_idx])
+	                    min_idx = j;
+	            swap(price[min_idx], price[i]);
+	            swap(model[min_idx], model[i]);
+	            swap(brand[min_idx], brand[i]);
+	            swap(RAM[min_idx], RAM[i]);
+	            swap(QTY[min_idx], QTY[i]);
+	        }
+	    }
     
-    void printterbalik(string model[], string brand[], double price[], int RAM[],int QTY[], int count){
-    	for (int i = count - 1; i >= 0; i--){
-            cout <<"Model : "<< model[i] << " Brand : " << brand[i] <<fixed<<setprecision(2) << " Price : RM" << price[i] << " RAM : " << RAM[i] <<" Quantity : "<< QTY[i]  << endl;
-        }
-	}
+    friend void printFull(const SelectionSort &s);
+    friend void printterbalik(const SelectionSort &s);
 
-private:
+
     void swap(int &xp, int &yp) {
         int temp = xp;
         xp = yp;
@@ -348,6 +391,28 @@ private:
         yp = temp;
     }
 };
+
+void printFull(const SelectionSort &s) {
+    for (int i = 0; i < s.n; i++) {
+        cout << "Model : " << s.model[i]
+             << " Brand : " << s.brand[i]
+             << fixed << setprecision(2)
+             << " Price : RM" << s.price[i]
+             << " RAM : " << s.RAM[i]
+             << " Quantity : " << s.QTY[i] << endl;
+    }
+}
+
+void printterbalik(const SelectionSort &s) {
+    for (int i = s.n - 1; i >= 0; i--) {
+        cout << "Model : " << s.model[i]
+             << " Brand : " << s.brand[i]
+             << fixed << setprecision(2)
+             << " Price : RM" << s.price[i]
+             << " RAM : " << s.RAM[i]
+             << " Quantity : " << s.QTY[i] << endl;
+    }
+}
 //inserttionsort
 class InsertSort {
 public:
@@ -680,19 +745,21 @@ class Laptop  : public Product{
 		    cout << "Enter choice (1 or 2): ";
 		    cin >> choice;
 		
-		    SelectionSort s;
-		    s.sortWithRecord(price, model, brand, RAM, QTY, count);
-		
-		    if (choice == 1) {
-		        cout << "Sorted laptop data (Low to High):\n";
-		        s.printFull(model, brand, price, RAM, QTY, count);
-		    } else if (choice == 2) {
-		        cout << "Sorted laptop data (High to Low):\n";
-		        s.printterbalik(model, brand, price, RAM, QTY, count);
-		    } else {
-		        cout << "Invalid choice!" << endl;
-		    }
-		    system("pause");
+		   SelectionSort s(model, brand, price, RAM, QTY, count); 
+		   s.sortWithRecord();
+
+			if (choice == 1) {
+			    cout << "Sorted laptop data (Low to High):\n";
+			    printFull(s); 
+			} else if (choice == 2) {
+			    cout << "Sorted laptop data (High to Low):\n";
+			    printterbalik(s);
+			} else {
+			    cout << "Invalid choice!" << endl;
+			}
+			
+			system("pause");
+
 		}
 		void deleteproduct() override {
 		    string product_id;
@@ -1310,33 +1377,46 @@ class Handphone : public Product{
 	}
 };
 class User : public login_system{	
+	error eh;
 	public:
-		int Menu(){
-			int back = 0;
-			int choice;
-			while(back == 0){
-				system("cls");
-				cout<<"*******************"<<endl;
-				cout<<"     User Menu     "<<endl;
-				cout<<"*******************"<<endl;
-				cout<<"1.Login\n2.Register\n3.Back to previous"<<endl;
-				cout<<"Enter your choice:";
-				cin>>choice;
-				switch(choice){
-					case 1:
-						set("user");
-						login();
-						back = functionMenu();
-						break;
-					case 2:
-						back = register_user();
-						break;
-					case 3:
-						return 1;
-						break;
-				}
-			}
-			return 0;
+		int Menu() {
+	 		int back = 0;
+	        int choice;
+	        while (back == 0) {
+	            system("cls");
+	            cout << "*******************" << endl;
+	            cout << "     User Menu     " << endl;
+	            cout << "*******************" << endl;
+	            cout << "1.Login\n2.Register\n3.Back to previous" << endl;
+	            cout << "Enter your choice:";
+		        try {
+		            cin >> choice;
+		            if (cin.fail()) {
+		                eh.displayuser(runtime_error("Invalid input! Enter number."));
+		                throw runtime_error("Invalid input.");
+		            }
+		            switch (choice) {
+		                case 1:
+		                    set("user");
+		                    login();
+		                    back = functionMenu();
+		                    break;
+	                    case 2:
+	                        back = register_user();
+	                        break;
+	                    case 3:
+	                        return 1;
+	                    default:
+	                        throw out_of_range("Choice must be 1–3.");
+	                }
+		        } catch (const exception &e) {
+		            cin.clear();
+		            cin.ignore(1000, '\n');
+		            system("pause");
+		            Menu();
+		        }
+		    }
+		    return 0;
 		}
 		int functionMenu() {
 	        system("cls");
@@ -1352,77 +1432,88 @@ class User : public login_system{
 	            cout << "1. Buy Laptop\n2. Buy Handphone\n3. Edit Laptop Record\n4. Edit Handphone Record\n5. Display Product Available\n6. View Cart";
 				cout << "\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Cancel Laptop Order\n12.Cancel Handphone Order\n13.Make Payment\n14.Generate Consumption Report\n15.View Consumption Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
-	            cin >> choice;
-	            switch (choice) {
-	                case 1: {
-	                    L.display();
-	                    L.buyLaptop(getUserID());
-	                    break;
+	            try {
+	                cin >> choice;
+	                if (cin.fail()) {
+	                    cout << "Invalid input! Please enter a number." << endl;  
+    					throw runtime_error("\n"); 
 	                }
-	                case 2: {
-	                    H.display();
-	                    H.buyHandphone(getUserID());
-	                    break;
-	                }
-	                case 3: {
-	                    editLaptopCart(*this);
-	                    break;
-	                }
-	                case 4: {
-	                    editHandphoneCart(*this);
-	                    break;
-	                }
-	                case 5: {
-	                    L.display();
-	                    H.display();
-	                    break;
-	                }
-	                case 6: {
-	                    viewCart(*this);
-	                    break;
-	                }
-					case 7: {
-	                    L.searchLaptop();
-	                    break;
-	                }
-					case 8: {
-	                	H.searchHandphone();
-	                    break;
-	                }
-	                case 9: {
-	                    L.sortLaptop();
-	                    break;
-	                }
-	                case 10: {
-	                    H.sortHandphone();
-	                    break;
-	                }
-	                case 11:
-	                	deleteLaptopCart(*this);
-	                	break;
-	                case 12:
-	                	deleteHandphoneCart(*this);
-	                	break;
-                	case 13:
-	                	makepayment(getUserID());
-	                	break;
-	                case 14:
-	                	consumptionReport(getUserID());
-	                	break;
-	                case 15:
-	                	viewconsumptionReport(getUserID());
-	                	break;
-	                case -1:
-	                    return 0;  
-	                    break;
+		            switch (choice) {
+		                case 1: {
+		                    L.display();
+		                    L.buyLaptop(getUserID());
+		                    break;
+		                }
+		                case 2: {
+		                    H.display();
+		                    H.buyHandphone(getUserID());
+		                    break;
+		                }
+		                case 3: {
+		                    editLaptopCart(*this);
+		                    break;
+		                }
+		                case 4: {
+		                    editHandphoneCart(*this);
+		                    break;
+		                }
+		                case 5: {
+		                    L.display();
+		                    H.display();
+		                    break;
+		                }
+		                case 6: {
+		                    viewCart(*this);
+		                    break;
+		                }
+						case 7: {
+		                    L.searchLaptop();
+		                    break;
+		                }
+						case 8: {
+		                	H.searchHandphone();
+		                    break;
+		                }
+		                case 9: {
+		                    L.sortLaptop();
+		                    break;
+		                }
+		                case 10: {
+		                    H.sortHandphone();
+		                    break;
+		                }
+		                case 11:
+		                	deleteLaptopCart(*this);
+		                	break;
+		                case 12:
+		                	deleteHandphoneCart(*this);
+		                	break;
+	                	case 13:
+		                	makepayment(getUserID());
+		                	break;
+		                case 14:
+		                	consumptionReport(getUserID());
+		                	break;
+		                case 15:
+		                	viewconsumptionReport(getUserID());
+		                	break;
+		                case -1:
+		                    return 0;  
+		                    break;
+		            }	            
+				} catch (const exception &e) {
+	                eh.displayusermenu(e);
+	                cin.clear();
+	                cin.ignore(1000, '\n');
+	                system("pause");
+	                functionMenu();
 	            }
-	        }
-	        return 0;
-	    }
-
-
+	    	}
+			return 0;
+		}
 };
 class Admin : public login_system{
+	error eh;
 	public:
 		int Menu(){
 			int back = 0;
@@ -1434,18 +1525,28 @@ class Admin : public login_system{
 				cout<<"--------------------"<<endl;
 				cout<<"1.Login\n2.Back to previous"<<endl;
 				cout<<"Enter your choice:";
-				cin>>choice;
-				switch(choice){
-					case 1:
-						set("admin");
-						login();
-						back = functionMenua();
-						break;
-					case 2:
-						return 1;
-						break;
-				}
-			}
+				try {
+					cin>>choice;
+				    if (cin.fail()) {
+		                eh.displayadmin(runtime_error("Invalid input! Enter number."));
+		                throw runtime_error("\n");
+		            }
+		            switch (choice) {
+		                case 1:
+		                    set("admin");
+		                    login();
+		                    back = functionMenua();
+		                    break;
+		                case 2:
+		                    return 1;
+		            }
+	            } catch (const exception &e) {
+		            cin.clear();
+		            cin.ignore(1000, '\n');
+		            system("pause");
+	                Menu();
+		        }
+	    	}		
 			return 0;
 		}	
 		int functionMenua() {
@@ -1463,95 +1564,118 @@ class Admin : public login_system{
 	            cout << "1. Add Laptop\n2. Add Handphone\n3. Edit Laptop\n4. Edit Handphone\n5. Display Laptop\n6. Display Handphone";
 				cout<<"\n7. Search Laptop \n8. Search Handphone\n9. Sort Laptop\n10.Sort Handphone\n11.Delate Laptop\n12.Delete Handphone\n13.Generate Sales Summary Report\n14.View Sales Summary Report\n-1. Back to previous" << endl;
 	            cout << "Enter your choice:";
-	            cin >> choice;
-	            switch (choice) {
-	                case 1: {
-	                    laptop.add_record();  
-	                    break;
-	                }
-	                case 2: {
-	                    handphone.add_record();  
-	                    break;
-	                }
-	                case 3: {
-	                    laptop.edit();
-	                    break;
-	                }
-	                case 4: {
-	                    handphone.edit();
-	                    break;
-	                }
-	                case 5: {
-	                    laptop.display();
-	                    break;
-	                }
-	                case 6: {
-	                    handphone.display();
-	                    break;
-	                }
-					case 7: {
-	                    laptop.searchLaptop();  
-	                    break;
-	                }
-					case 8: {
-	                    handphone.searchHandphone();  
-	                    break;
-	                }
-	                case 9: {
-	                    laptop.sortLaptop();  
-	                    break;
-	                }
-	                case 10: {
-	                    handphone.sortHandphone();  
-	                    break;
-	                }
-	                case 11:
-	                	laptop.deleteproduct();
-	                	break;
-	                case 12:
-	                	handphone.deleteproduct();
-	                	break;
-	                case 13:
-	                	salesSummaryReport();
-	                	break;
-	                case 14:
-	                	viewsalesSummaryReport();
-	                	break;
-	                case -1:
-	                    return 0;  
-	                    break;
-	            }
+	            try {
+		            cin >> choice;
+		            if (cin.fail()) {
+		                eh.displayadminmenu(runtime_error("Invalid input! Enter number."));
+		                throw runtime_error("\n");
+		            }
+		            switch (choice) {
+		                case 1: {
+		                    laptop.add_record();  
+		                    break;
+		                }
+		                case 2: {
+		                    handphone.add_record();  
+		                    break;
+		                }
+		                case 3: {
+		                    laptop.edit();
+		                    break;
+		                }
+		                case 4: {
+		                    handphone.edit();
+		                    break;
+		                }
+		                case 5: {
+		                    laptop.display();
+		                    break;
+		                }
+		                case 6: {
+		                    handphone.display();
+		                    break;
+		                }
+						case 7: {
+		                    laptop.searchLaptop();  
+		                    break;
+		                }
+						case 8: {
+		                    handphone.searchHandphone();  
+		                    break;
+		                }
+		                case 9: {
+		                    laptop.sortLaptop();  
+		                    break;
+		                }
+		                case 10: {
+		                    handphone.sortHandphone();  
+		                    break;
+		                }
+		                case 11:
+		                	laptop.deleteproduct();
+		                	break;
+		                case 12:
+		                	handphone.deleteproduct();
+		                	break;
+		                case 13:
+		                	salesSummaryReport();
+		                	break;
+		                case 14:
+		                	viewsalesSummaryReport();
+		                	break;
+		                case -1:
+		                    return 0;  
+		                    break;
+		            }
+		        } catch (const exception &e) {
+		            cin.clear();
+		            cin.ignore(1000, '\n');
+		            system("pause");
+		            functionMenua();
+        		}
 	        }
 	        return 0;
 	    }
 };
 
-int main(){
-	int choice,back=1;
-	User U;
-	Admin A;
-	while (back == 1) {
-		system("cls");
-		cout<<"========================================"<<endl;
-		cout<<"   Welcome to LK Digital Product Shop   "<<endl;
-		cout<<"========================================"<<endl;
-		cout<<"1.Admin\n2.User\n3.Exit"<<endl;
-		cout<<"Enter your choice:";
-		cin>>choice;
-		switch(choice){
-			case 1:
-				back = A.Menu();
-				break;
-			case 2:
-				back = U.Menu();
-				break;
-			case 3:
-				exit(0);
-				break;
-		}
-	}	
-	return 0;
+int main() {
+    int choice, back = 1;
+    User U;
+    Admin A;
+    error eh;
+    while (back == 1) {
+        system("cls");
+        cout << "========================================" << endl;
+        cout << "   Welcome to LK Digital Product Shop   " << endl;
+        cout << "========================================" << endl;
+        cout << "1.Admin\n2.User\n3.Exit" << endl;
+        cout << "Enter your choice:";
+        try {
+            cin >> choice;
+            if (cin.fail()) {
+                eh.displaymain(runtime_error("Invalid input! Enter number."));
+                throw runtime_error("\n");
+            }
+            switch (choice) {
+                case 1: 
+					back = A.Menu(); 
+					break;
+                case 2: 
+					back = U.Menu(); 
+					break;
+                case 3: 
+					exit(0);
+            }
+        } catch (const exception &e) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            system("pause");
+            main();
+        }
+    }
+    return 0;
 }
+
 
 void editHandphoneCart(login_system &user){
 	Handphone H;
@@ -2093,9 +2217,9 @@ bool containH(string input){
 
 bool containL(string input){
 	for (int i = 0; i < input.length(); i++) {
-    if (input[i] == 'L') {
-        return true;
-    }
+	    if (input[i] == 'L') {
+	        return true;
+	    }
 	}
 	return false;
 }
