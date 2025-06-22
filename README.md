@@ -12,6 +12,21 @@ A digital product management system with:
 - **User Portal** (Explore, purchase & view history)  
 - **File-based Database** (No SQL required)  
 
+## Features
+
+### User Features
+| Functionality       | Technical Implementation        |
+|---------------------|---------------------------------|
+| Product Browsing    | Linked list traversal           |
+| Cart Management     | Session-based temporary storage |
+| Order History       | File-based transaction logs     |
+
+### Admin Features
+| Functionality       | Technical Implementation        |
+|---------------------|---------------------------------|
+| Inventory Control   | CRUD operations via file I/O    |
+| Sales Analytics     | Real-time file parsing          |
+
 
 ### Admin Functions  
 | Feature               | Description                                 |
@@ -31,12 +46,12 @@ The system uses **plain text files** as a lightweight database alternative, ensu
 
 ### File Structure
 data
-├── 📄 Laptop.txt # Format: P_ID|Model|Brand|Price|RAM|Quantity
-├── 📄 Handphone.txt # Format: P_ID|Model|Brand|Price|RAM|Quantity
-├── 📄 user.txt # Format: U_ID|Username|Password|Identity
-├── 📄 admin.txt # Format: U_ID|Username|Password|Identity
-├── 📄 purchase_record.txt # Format: Order_ID|User_ID|Product_ID|Model|Price|Quantity|Total|Status
-└── 📄 id_record.txt # Tracks: Last_Laptop_ID|Last_Phone_ID|Last_Order_ID
+├──  Laptop.txt # Format: P_ID|Model|Brand|Price|RAM|Quantity
+├──  Handphone.txt # Format: P_ID|Model|Brand|Price|RAM|Quantity
+├──  user.txt # Format: U_ID|Username|Password|Identity
+├──  admin.txt # Format: U_ID|Username|Password|Identity
+├──  purchase_record.txt # Format: Order_ID|User_ID|Product_ID|Model|Price|Quantity|Total|Status
+└──  id_record.txt # Tracks: Last_Laptop_ID|Last_Phone_ID|Last_Order_ID
 
 ### Technical Notes
 - **Delimiters**: Uses pipe (`|`) for field separation
@@ -55,3 +70,46 @@ data
 #include <fstream>  
 #include <string>    
 
+## How to Use
+
+### Prerequisites
+- C++ compiler (g++/clang++ recommended)
+- 10MB free disk space
+- Terminal/Command Prompt access
+
+### Running the Program
+1. Compile:
+   ```bash
+   g++ digital_product_shop.cpp -o shop
+
+## Execute:
+   ./shop
+   
+###First Run
+The system automatically creates these files:
+Project Directory/
+├──  user.txt            # User accounts
+├──  admin.txt           # Admin accounts
+├──  Laptop.txt          # Laptop inventory
+├──  Handphone.txt       # Phone inventory
+├──  purchase_record.txt # Order history
+└──  id_record.txt       # ID counter
+
+###Code Structure
+text
+ Core/
+├──  Product.h           # Base product class
+├──  Laptop.h            # Laptop implementation
+├──  Handphone.h         # Phone implementation
+├──  login_system.h      # Authentication
+└──  main.cpp            # Entry point
+
+ Data/                  # Auto-generated
+├──  *.txt              # All data files
+
+##Notes：
+The system uses console input/output and is designed for single-user operation.
+
+All data persists between sessions via text files.
+
+can you follow This?
