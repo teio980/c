@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 L1 MacBook_Pro_13 Apple 1299.99 8 50
 L2 MacBook_Pro_16 Apple 2399.99 16 30
 L3 XPS_13 Dell 999.99 16 45
@@ -49,7 +48,4 @@ L47 Blade_17 Razer 2599.99 32 10
 L48 Book_Flex Samsung 1399.99 16 30
 L49 Galaxy_Book_Flex Samsung 1599.99 16 25
 L50 Creator_15 MSI 1999.99 32 10
-=======
-L1 TUF15 ASUS 3599 5 2
-L2 Nitro4 Acer 2499 8 11
->>>>>>> origin/main
+
