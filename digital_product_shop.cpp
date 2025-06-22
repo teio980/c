@@ -650,6 +650,7 @@ class Laptop  : public Product{
             }
 			temp = head;
 		    while (temp != nullptr) {
+		    	Item* newItem = new Item();
 		        if (temp->P_ID == product_id) {
 		            cout << "Enter New Laptop Model: ";
 		            cin.ignore();
@@ -1159,6 +1160,7 @@ class Handphone : public Product{
             }
 			temp = head;
 		    while (temp != nullptr) {
+		    	Item* newItem = new Item();
 		        if (temp->P_ID == product_id) {
 		            cout << "Enter New Laptop Model: ";
 		            cin.ignore();
@@ -1246,8 +1248,8 @@ class Handphone : public Product{
 		    int option;
 		    cin >> option;
             while(cin.fail()){
-                cout<<"Invalid Value. Pleae Enter an Integer."<<endl;
-                cout>>"Search by:\n1. Price\n2. Model\nChoose (1/2): ";
+                cout <<"Invalid Value. Pleae Enter an Integer."<<endl;
+                cout <<"Search by:\n1. Price\n2. Model\nChoose (1/2): ";
                 cin>>option;
             }
 		    if (option == 1) {
