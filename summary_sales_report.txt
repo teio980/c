@@ -1,6 +1,6 @@
 ===   SUMMARY REPORT   === 
-Total Records        :1
-Pending Bookings     :0
-Paid Bookings        :1
-Total Amount Sales   : RM4998
-Total Amount Received: RM4998
+Total Records        :3
+Pending Bookings     :1
+Paid Bookings        :2
+Total Amount Sales   : RM9096
+Total Amount Received: RM6597
