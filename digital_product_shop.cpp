@@ -650,7 +650,6 @@ class Laptop  : public Product{
             }
 			temp = head;
 		    while (temp != nullptr) {
-		    	Item* newItem = new Item();
 		        if (temp->P_ID == product_id) {
 		            cout << "Enter New Laptop Model: ";
 		            cin.ignore();
@@ -659,40 +658,40 @@ class Laptop  : public Product{
 		            getline(cin, temp->brand);
                     do{
                     cout << "Enter Price: ";
-                    cin >> newItem->price;
+                    cin >> temp->price;
                     while(cin.fail()){
                         cout<<"Please enter a valid number."<<endl;
                         cout << "Enter Price: ";
-                        cin >> newItem->price;
+                        cin >> temp->price;
                     }
-                    if (newItem->price <= 0) {
+                    if (temp->price <= 0) {
                         cout << "Invalid number of price!\n";
                     }
-                    }while(newItem->price<=0);
+                    }while(temp->price<=0);
                     do{
                         cout << "Enter RAM (GB): ";
-                        cin >> newItem->RAM;
+                        cin >> temp->RAM;
                         while(cin.fail()){
                             cout<<"Please enter a integer."<<endl;
                             cout << "Enter RAM (GB): ";
-                            cin >> newItem->RAM;
+                            cin >> temp->RAM;
                         }
-                        if (newItem->RAM <= 0) {
+                        if (temp->RAM <= 0) {
                             cout << "Invalid number of RAM!Please Enter a interger.\n";
                         }
-                    }while(newItem->RAM<=0);
+                    }while(temp->RAM<=0);
                     do{
                         cout << "Enter Quantity: ";
-                        cin >> newItem->quantity;
+                        cin >> temp->quantity;
                         while(cin.fail()){
                             cout<<"Please enter a integer."<<endl;
                             cout << "Enter Quantity: ";
-                            cin >> newItem->quantity;
+                            cin >> temp->quantity;
                         }
-                        if (newItem->quantity <= 0) {
+                        if (temp->quantity <= 0) {
                             cout << "Invalid number of Quantity!Please Enter a interger.\n";
                         }
-                    }while(newItem->quantity<=0);
+                    }while(temp->quantity<=0);
 		            break;
 		        }
 		        temp = temp->next;
@@ -1160,7 +1159,6 @@ class Handphone : public Product{
             }
 			temp = head;
 		    while (temp != nullptr) {
-		    	Item* newItem = new Item();
 		        if (temp->P_ID == product_id) {
 		            cout << "Enter New Laptop Model: ";
 		            cin.ignore();
@@ -1181,40 +1179,40 @@ class Handphone : public Product{
 					}
 		            do{
                         cout << "Enter Price: ";
-                        cin >> newItem->price;
+                        cin >> temp->price;
                         while(cin.fail()){
                             cout<<"Please enter a valid number."<<endl;
                             cout << "Enter Price: ";
-                            cin >> newItem->price;
+                            cin >> temp->price;
                         }
-                        if (newItem->price <= 0) {
+                        if (temp->price <= 0) {
                             cout << "Invalid number of price!\n";
                         }
-                    }while(newItem->price<=0);
+                    }while(temp->price<=0);
                     do{
                         cout << "Enter RAM (GB): ";
-                        cin >> newItem->RAM;
+                        cin >> temp->RAM;
                         while(cin.fail()){
                             cout<<"Please enter a integer."<<endl;
                             cout << "Enter RAM (GB): ";
-                            cin >> newItem->RAM;
+                            cin >> temp->RAM;
                         }
-                        if (newItem->RAM <= 0) {
+                        if (temp->RAM <= 0) {
                             cout << "Invalid number of RAM!Please Enter a interger.\n";
                         }
-                    }while(newItem->RAM<=0);
+                    }while(temp->RAM<=0);
                     do{
                         cout << "Enter Quantity: ";
-                        cin >> newItem->quantity;
+                        cin >> temp->quantity;
                         while(cin.fail()){
                             cout<<"Please enter a integer."<<endl;
                             cout << "Enter Quantity: ";
-                            cin >> newItem->quantity;
+                            cin >> temp->quantity;
                         }
-                        if (newItem->quantity <= 0) {
+                        if (temp->quantity <= 0) {
                             cout << "Invalid number of Quantity!Please Enter a interger.\n";
                         }
-                    }while(newItem->quantity<=0);
+                    }while(temp->quantity<=0);
 		            cout << "Handphone details updated successfully!\n";
 		            break;
 		        }
