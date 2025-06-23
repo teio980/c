@@ -136,13 +136,14 @@ class login_system{
 		check_identity();
 		ifstream readfile(P.filename);
 		int count = 3;
-		do{
+		do{	
+			readfile.clear(); 
+        	readfile.seekg(0); 
 			cout<<"You have "<<count<<" chances to try login."<<endl;
 			cout<<"Enter your name:";
-			cin.ignore();
-			getline(cin,P.username);
+			cin>>P.username;
 			cout<<"Enter your password:";
-			getline(cin,P.password);
+			cin>>P.password;
 			while(readfile>>P.f_user_ID>>P.f_username>>P.f_password>>P.f_identity){
 				if(P.f_username == P.username && P.f_password == P.password){
 					cout<<"Successful Login!!"<<endl;
